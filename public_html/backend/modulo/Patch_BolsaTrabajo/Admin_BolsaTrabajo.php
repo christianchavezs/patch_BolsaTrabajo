@@ -41,7 +41,7 @@ $description = "";
             </div>
 
             <div class="patch-bolsa-header-actions">
-                <a href="javascript:;" class="patch-btn-secondary" id="btnMostrarArchivadas">
+                <a href="javascript:;" class="patch-btn-primary" id="btnMostrarArchivadas">
                     <i class="fa fa-archive"></i> Vacantes archivadas
                 </a>
                 <a href="javascript:;" class="patch-btn-primary" id="btnNuevaVacante">
