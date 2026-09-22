@@ -58,6 +58,7 @@ function formatearFecha($fecha): string
 
 /**
  * Obtiene una clase de color estable para cada vacante.
+ *
  * El color depende del ID para que cada vacante conserve
  * su apariencia mientras exista.
  */
@@ -532,6 +533,7 @@ if (!$stmt) {
 
         <?php if ($error): ?>
 
+
             <div class="mensaje error">
 
                 <strong>
@@ -546,6 +548,7 @@ if (!$stmt) {
 
 
         <?php elseif (!$vacantes): ?>
+
 
             <div class="mensaje">
 
@@ -644,6 +647,30 @@ if (!$stmt) {
                     $soloImagen =
                         (int)$vacante['solo_imagen'] === 1;
 
+
+                    /*
+                     * =================================================
+                     * URL DEL DETALLE DE LA VACANTE
+                     * =================================================
+                     *
+                     * La página pública de detalle utiliza el TOKEN
+                     * de la vacante, no el ID.
+                     *
+                     * Ejemplo:
+                     *
+                     * Detalle_Vacante.php?token=5bc1e752047a2dfa
+                     *
+                     * urlencode() protege correctamente el token
+                     * antes de colocarlo dentro de la URL.
+                     * =================================================
+                     */
+
+                    $urlDetalle =
+                        'Detalle_Vacante.php?token=' .
+                        urlencode(
+                            (string)$vacante['token']
+                        );
+
                     ?>
 
 
@@ -653,7 +680,8 @@ if (!$stmt) {
 
                     <a
                         class="tarjeta tarjeta-<?= e($color) ?>"
-                        href="BolsaDeTrabajoDetalle.php?token=<?= urlencode((string)$vacante['token']) ?>"
+                        href="<?= e($urlDetalle) ?>"
+                        aria-label="Ver detalles de <?= e($titulo ?: 'vacante disponible') ?>"
                     >
 
 
@@ -814,6 +842,7 @@ if (!$stmt) {
 
                             <?php if ($descripcion !== ''): ?>
 
+
                                 <p class="descripcion-vacante">
 
                                     <?= e(
@@ -825,7 +854,9 @@ if (!$stmt) {
 
                                 </p>
 
+
                             <?php else: ?>
+
 
                                 <p class="texto-solo-imagen">
 
@@ -833,6 +864,7 @@ if (!$stmt) {
                                     de esta vacante.
 
                                 </p>
+
 
                             <?php endif; ?>
 
@@ -842,11 +874,9 @@ if (!$stmt) {
                                  ================================================= -->
 
                             <?php if (
-
                                 $ubicacion !== ''
                                 || $tipoJornada !== ''
                                 || $modalidad !== ''
-
                             ): ?>
 
 
@@ -858,6 +888,7 @@ if (!$stmt) {
                                          ========================================= -->
 
                                     <?php if ($ubicacion !== ''): ?>
+
 
                                         <div class="dato-vacante">
 
@@ -896,6 +927,7 @@ if (!$stmt) {
 
                                         </div>
 
+
                                     <?php endif; ?>
 
 
@@ -904,6 +936,7 @@ if (!$stmt) {
                                          ========================================= -->
 
                                     <?php if ($tipoJornada !== ''): ?>
+
 
                                         <div class="dato-vacante">
 
@@ -942,6 +975,7 @@ if (!$stmt) {
 
                                         </div>
 
+
                                     <?php endif; ?>
 
 
@@ -950,6 +984,7 @@ if (!$stmt) {
                                          ========================================= -->
 
                                     <?php if ($modalidad !== ''): ?>
+
 
                                         <div class="dato-vacante">
 
@@ -989,6 +1024,7 @@ if (!$stmt) {
                                             </span>
 
                                         </div>
+
 
                                     <?php endif; ?>
 
@@ -1189,11 +1225,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let controladorActual = null;
 
 
-    /*
-     * =====================================================
-     * REALIZAR BÚSQUEDA
-     * =====================================================
-     */
+    /* =====================================================
+       REALIZAR BÚSQUEDA
+       ===================================================== */
 
     function realizarBusqueda(texto) {
 
@@ -1260,9 +1294,11 @@ document.addEventListener('DOMContentLoaded', function () {
             url.toString(),
             {
                 method: 'GET',
+
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 },
+
                 signal: controladorActual.signal
             }
         )
@@ -1381,7 +1417,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (
                 error.name === 'AbortError'
             ) {
+
                 return;
+
             }
 
 
@@ -1395,11 +1433,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    /*
-     * =====================================================
-     * BÚSQUEDA AL ESCRIBIR
-     * =====================================================
-     */
+    /* =====================================================
+       BÚSQUEDA AL ESCRIBIR
+       ===================================================== */
 
     campoBusqueda.addEventListener(
         'input',
@@ -1426,11 +1462,9 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
 
-    /*
-     * =====================================================
-     * BOTÓN LIMPIAR BÚSQUEDA
-     * =====================================================
-     */
+    /* =====================================================
+       BOTÓN LIMPIAR BÚSQUEDA
+       ===================================================== */
 
     botonLimpiar.addEventListener(
         'click',
@@ -1446,19 +1480,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             realizarBusqueda('');
 
-
         }
     );
 
 
-    /*
-     * =====================================================
-     * EVITAR ENVÍO TRADICIONAL DEL FORMULARIO
-     * =====================================================
-     *
-     * Aunque el botón ya no es submit, también evitamos
-     * que Enter provoque una recarga completa de la página.
-     */
+    /* =====================================================
+       EVITAR ENVÍO TRADICIONAL DEL FORMULARIO
+       =====================================================
+
+       Aunque el botón ya no es submit, también evitamos
+       que Enter provoque una recarga completa de la página.
+       */
 
     formBuscador.addEventListener(
         'submit',
