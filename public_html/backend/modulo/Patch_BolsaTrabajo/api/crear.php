@@ -7,9 +7,9 @@ require_once __DIR__ . "/../../../../includes/config.php";
 header('Content-Type: application/json; charset=utf-8');
 
 
-/* =========================================================
-   RESPUESTA JSON
-   ========================================================= */
+// =========================================================
+// RESPUESTA JSON
+// =========================================================
 
 function respuestaJSON($ok, $mensaje = '', $datos = null) {
 
@@ -23,9 +23,9 @@ function respuestaJSON($ok, $mensaje = '', $datos = null) {
 }
 
 
-/* =========================================================
-   GENERAR TOKEN ÚNICO
-   ========================================================= */
+// =========================================================
+// GENERAR TOKEN ÚNICO
+// =========================================================
 
 function generarTokenBolsa($conn) {
 
@@ -45,15 +45,20 @@ function generarTokenBolsa($conn) {
                 false,
                 'No fue posible preparar la validación del token.'
             );
+
         }
 
-        $stmt->bind_param("s", $token);
+        $stmt->bind_param(
+            "s",
+            $token
+        );
 
         $stmt->execute();
 
         $stmt->store_result();
 
-        $existe = $stmt->num_rows > 0;
+        $existe =
+            $stmt->num_rows > 0;
 
         $stmt->close();
 
@@ -63,9 +68,9 @@ function generarTokenBolsa($conn) {
 }
 
 
-/* =========================================================
-   GUARDAR IMAGEN DE VACANTE
-   ========================================================= */
+// =========================================================
+// GUARDAR IMAGEN DE VACANTE
+// =========================================================
 
 function guardarImagenVacante($archivo) {
 
@@ -78,12 +83,13 @@ function guardarImagenVacante($archivo) {
             'ok' => false,
             'mensaje' => 'No se recibió ninguna imagen.'
         ];
+
     }
 
 
-    /* =====================================================
-       VALIDAR ERROR DE SUBIDA
-       ===================================================== */
+    // =====================================================
+    // VALIDAR ERROR DE SUBIDA
+    // =====================================================
 
     if (
         !isset($archivo['error']) ||
@@ -94,12 +100,13 @@ function guardarImagenVacante($archivo) {
             'ok' => false,
             'mensaje' => 'No fue posible subir la imagen.'
         ];
+
     }
 
 
-    /* =====================================================
-       VALIDAR QUE EXISTA EL ARCHIVO
-       ===================================================== */
+    // =====================================================
+    // VALIDAR QUE EXISTA EL ARCHIVO
+    // =====================================================
 
     if (
         !isset($archivo['tmp_name']) ||
@@ -110,79 +117,116 @@ function guardarImagenVacante($archivo) {
             'ok' => false,
             'mensaje' => 'El archivo de imagen no es válido.'
         ];
+
     }
 
 
-    /* =====================================================
-       VALIDAR TIPO REAL DEL ARCHIVO
-       ===================================================== */
+    // =====================================================
+    // VALIDAR TIPO REAL DEL ARCHIVO
+    // =====================================================
 
     $tiposPermitidos = [
+
         'image/jpeg' => 'jpg',
+
         'image/png'  => 'png',
+
         'image/webp' => 'webp'
+
     ];
 
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
 
-    $tipoMime = $finfo->file(
-        $archivo['tmp_name']
-    );
-
-    if (!isset($tiposPermitidos[$tipoMime])) {
-
-        return [
-            'ok' => false,
-            'mensaje' => 'La imagen debe estar en formato JPG, PNG o WEBP.'
-        ];
-    }
+    $finfo =
+        new finfo(FILEINFO_MIME_TYPE);
 
 
-    /* =====================================================
-       VALIDAR QUE REALMENTE SEA UNA IMAGEN
-       ===================================================== */
+    $tipoMime =
+        $finfo->file(
+            $archivo['tmp_name']
+        );
 
-    $informacionImagen = @getimagesize(
-        $archivo['tmp_name']
-    );
 
-    if ($informacionImagen === false) {
+    if (
+        !isset(
+            $tiposPermitidos[$tipoMime]
+        )
+    ) {
 
         return [
             'ok' => false,
-            'mensaje' => 'El archivo recibido no es una imagen válida.'
+            'mensaje' =>
+                'La imagen debe estar en formato JPG, PNG o WEBP.'
         ];
+
     }
 
 
-    /* =====================================================
-       DIRECTORIO DE DESTINO
-       ===================================================== */
+    // =====================================================
+    // VALIDAR QUE REALMENTE SEA UNA IMAGEN
+    // =====================================================
 
-    $directorio = __DIR__ . '/../uploads/img_vacante/';
+    $informacionImagen =
+        @getimagesize(
+            $archivo['tmp_name']
+        );
+
+
+    if (
+        $informacionImagen === false
+    ) {
+
+        return [
+            'ok' => false,
+            'mensaje' =>
+                'El archivo recibido no es una imagen válida.'
+        ];
+
+    }
+
+
+    // =====================================================
+    // DIRECTORIO DE DESTINO
+    // =====================================================
+
+    $directorio =
+        __DIR__ .
+        '/../uploads/img_vacante/';
 
 
     if (!is_dir($directorio)) {
 
-        if (!mkdir($directorio, 0755, true)) {
+        if (
+            !mkdir(
+                $directorio,
+                0755,
+                true
+            )
+        ) {
 
             return [
                 'ok' => false,
-                'mensaje' => 'No fue posible crear la carpeta de imágenes.'
+                'mensaje' =>
+                    'No fue posible crear la carpeta de imágenes.'
             ];
+
         }
+
     }
 
 
-    /* =====================================================
-       GENERAR NOMBRE ÚNICO
-       ===================================================== */
+    // =====================================================
+    // GENERAR NOMBRE ÚNICO
+    // =====================================================
 
-    $extension = $tiposPermitidos[$tipoMime];
+    $extension =
+        $tiposPermitidos[$tipoMime];
+
 
     $nombreArchivo =
         'vacante_' .
-        bin2hex(random_bytes(16)) .
+        bin2hex(
+            random_bytes(16)
+        ) .
         '.' .
         $extension;
 
@@ -192,9 +236,9 @@ function guardarImagenVacante($archivo) {
         $nombreArchivo;
 
 
-    /* =====================================================
-       GUARDAR ARCHIVO
-       ===================================================== */
+    // =====================================================
+    // GUARDAR ARCHIVO
+    // =====================================================
 
     if (
         !move_uploaded_file(
@@ -205,14 +249,16 @@ function guardarImagenVacante($archivo) {
 
         return [
             'ok' => false,
-            'mensaje' => 'No fue posible guardar la imagen en el servidor.'
+            'mensaje' =>
+                'No fue posible guardar la imagen en el servidor.'
         ];
+
     }
 
 
-    /* =====================================================
-       URL PÚBLICA DE LA IMAGEN
-       ===================================================== */
+    // =====================================================
+    // URL PÚBLICA DE LA IMAGEN
+    // =====================================================
 
     $urlImagen =
         '/Patch_BolsaTrabajo/public_html/backend/modulo/Patch_BolsaTrabajo/uploads/img_vacante/' .
@@ -220,109 +266,205 @@ function guardarImagenVacante($archivo) {
 
 
     return [
+
         'ok' => true,
-        'mensaje' => 'Imagen guardada correctamente.',
-        'url' => $urlImagen,
-        'ruta' => $rutaFisica
+
+        'mensaje' =>
+            'Imagen guardada correctamente.',
+
+        'url' =>
+            $urlImagen,
+
+        'ruta' =>
+            $rutaFisica
+
     ];
 }
 
 
-/* =========================================================
-   CREAR VACANTE
-   ========================================================= */
+// =========================================================
+// CREAR VACANTE
+// =========================================================
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+) {
 
 
-    /* =====================================================
-       DATOS DEL FORMULARIO
-       ===================================================== */
+    // =====================================================
+    // DATOS DEL FORMULARIO
+    // =====================================================
 
     $titulo =
-        trim($_POST['titulo'] ?? '');
+        trim(
+            $_POST['titulo'] ?? ''
+        );
+
+
+    // =====================================================
+    // NUEVOS CAMPOS
+    // =====================================================
+
+    $descripcion =
+        trim(
+            $_POST['descripcion'] ?? ''
+        );
+
+
+    $ubicacion =
+        trim(
+            $_POST['ubicacion'] ?? ''
+        );
+
+
+    $tipoJornada =
+        trim(
+            $_POST['tipo_jornada'] ?? ''
+        );
+
+
+    $modalidad =
+        trim(
+            $_POST['modalidad'] ?? ''
+        );
+
+
+    // =====================================================
+    // CONTENIDO DE LA VACANTE
+    // =====================================================
 
     $loQueSeOfrece =
-        trim($_POST['lo_que_se_ofrece'] ?? '');
+        trim(
+            $_POST['lo_que_se_ofrece'] ?? ''
+        );
+
 
     $requisitos =
-        trim($_POST['requisitos'] ?? '');
+        trim(
+            $_POST['requisitos'] ?? ''
+        );
+
 
     $responsabilidades =
-        trim($_POST['responsabilidades'] ?? '');
+        trim(
+            $_POST['responsabilidades'] ?? ''
+        );
+
+
+    // =====================================================
+    // FECHA Y ESTADO
+    // =====================================================
 
     $fechaCierre =
-        trim($_POST['fecha_cierre'] ?? '');
+        trim(
+            $_POST['fecha_cierre'] ?? ''
+        );
+
 
     $activo =
-        (int)($_POST['activo'] ?? 1);
+        (int)(
+            $_POST['activo'] ?? 1
+        );
+
 
     $soloImagen =
-        (int)($_POST['solo_imagen'] ?? 0);
+        (int)(
+            $_POST['solo_imagen'] ?? 0
+        );
 
 
-    /* =====================================================
-       NORMALIZAR SOLO IMAGEN
-       ===================================================== */
+    // =====================================================
+    // NORMALIZAR ESTADO
+    // =====================================================
+
+    $activo =
+        $activo === 1
+            ? 1
+            : 0;
+
 
     $soloImagen =
-        $soloImagen === 1 ? 1 : 0;
+        $soloImagen === 1
+            ? 1
+            : 0;
 
 
-    /* =====================================================
-       VALIDAR TÍTULO
-       ===================================================== */
+    // =====================================================
+    // VALIDAR TÍTULO
+    // =====================================================
 
-    if ($titulo === '') {
+    if (
+        $titulo === ''
+    ) {
 
         respuestaJSON(
             false,
             'El título de la vacante es obligatorio.'
         );
+
     }
 
 
-    /* =====================================================
-       VALIDAR CAMPOS DE TEXTO
-       SOLO CUANDO NO ES SOLO IMAGEN
-       ===================================================== */
+    // =====================================================
+    // VALIDAR CAMPOS DE TEXTO
+    // SOLO CUANDO NO ES SOLO IMAGEN
+    // =====================================================
 
-    if ($soloImagen === 0) {
+    if (
+        $soloImagen === 0
+    ) {
 
-        if ($loQueSeOfrece === '') {
+        if (
+            $loQueSeOfrece === ''
+        ) {
 
             respuestaJSON(
                 false,
                 'El campo "Lo que se ofrece" es obligatorio.'
             );
+
         }
 
-        if ($requisitos === '') {
+
+        if (
+            $requisitos === ''
+        ) {
 
             respuestaJSON(
                 false,
                 'El campo "Requisitos" es obligatorio.'
             );
+
         }
 
-        if ($responsabilidades === '') {
+
+        if (
+            $responsabilidades === ''
+        ) {
 
             respuestaJSON(
                 false,
                 'El campo "Responsabilidades" es obligatorio.'
             );
+
         }
+
     }
 
 
-    /* =====================================================
-       VALIDAR IMAGEN EN MODO SOLO IMAGEN
-       ===================================================== */
+    // =====================================================
+    // VALIDAR IMAGEN EN MODO SOLO IMAGEN
+    // =====================================================
 
     $tieneImagen =
-        isset($_FILES['imagen']) &&
-        isset($_FILES['imagen']['error']) &&
-        $_FILES['imagen']['error'] === UPLOAD_ERR_OK;
+        isset(
+            $_FILES['imagen']
+        ) &&
+        isset(
+            $_FILES['imagen']['error']
+        ) &&
+        $_FILES['imagen']['error'] ===
+            UPLOAD_ERR_OK;
 
 
     if (
@@ -334,40 +476,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             false,
             'Debes seleccionar una imagen para una vacante de solo imagen.'
         );
+
     }
 
 
-    /* =====================================================
-       GENERAR TOKEN
-       ===================================================== */
+    // =====================================================
+    // GENERAR TOKEN
+    // =====================================================
 
     $token =
-        generarTokenBolsa($conn);
+        generarTokenBolsa(
+            $conn
+        );
 
 
-    /* =====================================================
-       FECHA DE CIERRE
-       ===================================================== */
+    // =====================================================
+    // FECHA DE CIERRE
+    // =====================================================
 
-    $fechaCierreDB = null;
+    $fechaCierreDB =
+        null;
 
-    if ($fechaCierre !== '') {
+
+    if (
+        $fechaCierre !== ''
+    ) {
 
         $fechaCierreDB =
-            $fechaCierre . ' 23:59:59';
+            $fechaCierre .
+            ' 23:59:59';
+
     }
 
 
-    /* =====================================================
-       IMAGEN
-       ===================================================== */
+    // =====================================================
+    // IMAGEN
+    // =====================================================
 
-    $urlImagen = null;
+    $urlImagen =
+        null;
 
-    $rutaImagenGuardada = null;
+
+    $rutaImagenGuardada =
+        null;
 
 
-    if ($tieneImagen) {
+    if (
+        $tieneImagen
+    ) {
 
         $resultadoImagen =
             guardarImagenVacante(
@@ -375,31 +531,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
 
-        if (!$resultadoImagen['ok']) {
+        if (
+            !$resultadoImagen['ok']
+        ) {
 
             respuestaJSON(
                 false,
                 $resultadoImagen['mensaje']
             );
+
         }
 
 
         $urlImagen =
             $resultadoImagen['url'];
 
+
         $rutaImagenGuardada =
             $resultadoImagen['ruta'];
+
     }
 
 
-    /* =====================================================
-       INSERTAR VACANTE
-       ===================================================== */
+    // =====================================================
+    // INSERTAR VACANTE
+    // =====================================================
 
     $sql = "INSERT INTO patch_BolsaTrabajo
             (
                 token,
                 titulo,
+                descripcion,
+                ubicacion,
+                tipo_jornada,
+                modalidad,
                 lo_que_se_ofrece,
                 requisitos,
                 responsabilidades,
@@ -417,6 +582,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ?,
                 ?,
                 ?,
+                ?,
+                ?,
+                ?,
+                ?,
                 0,
                 ?,
                 ?,
@@ -425,21 +594,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     $stmt =
-        $conn->prepare($sql);
+        $conn->prepare(
+            $sql
+        );
 
 
-    if (!$stmt) {
+    if (
+        !$stmt
+    ) {
 
-        /* ================================================
-           ELIMINAR IMAGEN SI LA BD NO PUDO PREPARARSE
-           ================================================ */
+        // =================================================
+        // ELIMINAR IMAGEN SI LA BD NO PUDO PREPARARSE
+        // =================================================
 
         if (
             $rutaImagenGuardada &&
-            file_exists($rutaImagenGuardada)
+            file_exists(
+                $rutaImagenGuardada
+            )
         ) {
 
-            @unlink($rutaImagenGuardada);
+            @unlink(
+                $rutaImagenGuardada
+            );
+
         }
 
 
@@ -447,42 +625,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             false,
             'No fue posible preparar el registro de la vacante.'
         );
+
     }
 
 
+    // =====================================================
+    // ASIGNAR PARÁMETROS
+    // =====================================================
+    //
+    // 9 strings:
+    // token
+    // titulo
+    // descripcion
+    // ubicacion
+    // tipoJornada
+    // modalidad
+    // loQueSeOfrece
+    // requisitos
+    // responsabilidades
+    //
+    // 2 enteros:
+    // activo
+    // soloImagen
+    //
+    // 2 strings:
+    // urlImagen
+    // fechaCierreDB
+    // =====================================================
+
     $stmt->bind_param(
-        "sssssiiss",
+
+        "sssssssssiiss",
+
         $token,
+
         $titulo,
+
+        $descripcion,
+
+        $ubicacion,
+
+        $tipoJornada,
+
+        $modalidad,
+
         $loQueSeOfrece,
+
         $requisitos,
+
         $responsabilidades,
+
         $activo,
+
         $soloImagen,
+
         $urlImagen,
+
         $fechaCierreDB
+
     );
 
 
-    /* =====================================================
-       EJECUTAR INSERT
-       ===================================================== */
+    // =====================================================
+    // EJECUTAR INSERT
+    // =====================================================
 
-    if (!$stmt->execute()) {
+    if (
+        !$stmt->execute()
+    ) {
 
         $stmt->close();
 
 
-        /* ================================================
-           SI FALLA BD, ELIMINAR IMAGEN YA GUARDADA
-           ================================================ */
+        // =================================================
+        // SI FALLA BD, ELIMINAR IMAGEN YA GUARDADA
+        // =================================================
 
         if (
             $rutaImagenGuardada &&
-            file_exists($rutaImagenGuardada)
+            file_exists(
+                $rutaImagenGuardada
+            )
         ) {
 
-            @unlink($rutaImagenGuardada);
+            @unlink(
+                $rutaImagenGuardada
+            );
+
         }
 
 
@@ -490,15 +719,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             false,
             'No fue posible guardar la vacante.'
         );
+
     }
 
 
     $stmt->close();
 
 
-    /* =====================================================
-       RECUPERAR REGISTRO CREADO
-       ===================================================== */
+    // =====================================================
+    // RECUPERAR REGISTRO CREADO
+    // =====================================================
 
     $sqlGet =
         "SELECT *
@@ -507,15 +737,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     $stmtGet =
-        $conn->prepare($sqlGet);
+        $conn->prepare(
+            $sqlGet
+        );
 
 
-    if (!$stmtGet) {
+    if (
+        !$stmtGet
+    ) {
 
         respuestaJSON(
             true,
             'La vacante fue creada correctamente.'
         );
+
     }
 
 
@@ -539,21 +774,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmtGet->close();
 
 
-    /* =====================================================
-       RESPUESTA FINAL
-       ===================================================== */
+    // =====================================================
+    // RESPUESTA FINAL
+    // =====================================================
 
     respuestaJSON(
+
         true,
+
         'La vacante fue creada correctamente.',
+
         $vacante
+
     );
+
 }
 
 
-/* =========================================================
-   ACCIÓN NO VÁLIDA
-   ========================================================= */
+// =========================================================
+// ACCIÓN NO VÁLIDA
+// =========================================================
 
 respuestaJSON(
     false,

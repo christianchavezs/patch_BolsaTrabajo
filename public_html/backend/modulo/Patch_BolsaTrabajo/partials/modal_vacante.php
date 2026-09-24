@@ -19,7 +19,9 @@
                 id="btnCerrarModal"
                 title="Cerrar"
             >
+
                 <i class="fa fa-times"></i>
+
             </button>
 
         </div>
@@ -65,13 +67,139 @@
 
 
                 <!-- ========================================== -->
+                <!-- DESCRIPCIÓN -->
+                <!-- ========================================== -->
+
+                <div class="patch-form-group">
+
+                    <label class="patch-form-label">
+
+                        Descripción del puesto
+
+                    </label>
+
+                    <textarea
+                        id="campoDescripcion"
+                        class="patch-form-input"
+                        placeholder="Describe brevemente el puesto, su objetivo o las principales características de la vacante."
+                        maxlength="1000"
+                        rows="4"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- ========================================== -->
+                <!-- INFORMACIÓN GENERAL -->
+                <!-- ========================================== -->
+
+                <div class="patch-form-row">
+
+                    <!-- UBICACIÓN -->
+
+                    <div class="patch-form-group">
+
+                        <label class="patch-form-label">
+
+                            Ubicación
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="campoUbicacion"
+                            class="patch-form-input"
+                            value="San Luis Potosí, S.L.P."
+                            placeholder="Ej. San Luis Potosí, S.L.P."
+                            maxlength="255"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <!-- TIPO DE JORNADA -->
+
+                    <div class="patch-form-group">
+
+                        <label class="patch-form-label">
+
+                            Tipo de jornada
+
+                        </label>
+
+                        <select
+                            id="campoTipoJornada"
+                            class="patch-form-input"
+                        >
+
+                            <option value="">Selecciona una opción</option>
+
+                            <option value="Tiempo Completo">
+                                Tiempo Completo
+                            </option>
+
+                            <option value="Medio Tiempo">
+                                Medio Tiempo
+                            </option>
+
+                            <option value="Prácticas Profesionales">
+                                Prácticas Profesionales
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========================================== -->
+                <!-- MODALIDAD -->
+                <!-- ========================================== -->
+
+                <div class="patch-form-group">
+
+                    <label class="patch-form-label">
+
+                        Modalidad
+
+                    </label>
+
+                    <select
+                        id="campoModalidad"
+                        class="patch-form-input"
+                    >
+
+                        <option value="">Selecciona una opción</option>
+
+                        <option value="Presencial">
+                            Presencial
+                        </option>
+
+                        <option value="Hibrido">
+                            Hibrido
+                        </option>
+
+                        <option value="Remoto">
+                            Remoto
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ========================================== -->
                 <!-- TIPO DE CONTENIDO -->
                 <!-- ========================================== -->
 
                 <div class="patch-form-group">
 
                     <label class="patch-form-label">
+
                         Tipo de contenido
+
                     </label>
 
                     <div class="patch-toggle-wrapper">
@@ -143,7 +271,9 @@
                                 data-command="bold"
                                 title="Negrita"
                             >
+
                                 <i class="fa fa-bold"></i>
+
                             </button>
 
                             <button
@@ -152,7 +282,9 @@
                                 data-command="italic"
                                 title="Cursiva"
                             >
+
                                 <i class="fa fa-italic"></i>
+
                             </button>
 
                             <span class="patch-editor-separator"></span>
@@ -163,7 +295,9 @@
                                 data-command="insertUnorderedList"
                                 title="Lista con viñetas"
                             >
+
                                 <i class="fa fa-list-ul"></i>
+
                             </button>
 
                             <button
@@ -172,7 +306,9 @@
                                 data-command="insertOrderedList"
                                 title="Lista numerada"
                             >
+
                                 <i class="fa fa-list-ol"></i>
+
                             </button>
 
                             <span class="patch-editor-separator"></span>
@@ -183,7 +319,9 @@
                                 data-command="removeFormat"
                                 title="Quitar formato"
                             >
+
                                 <i class="fa fa-eraser"></i>
+
                             </button>
 
                         </div>
@@ -235,7 +373,9 @@
                                 data-command="bold"
                                 title="Negrita"
                             >
+
                                 <i class="fa fa-bold"></i>
+
                             </button>
 
                             <button
@@ -244,7 +384,9 @@
                                 data-command="italic"
                                 title="Cursiva"
                             >
+
                                 <i class="fa fa-italic"></i>
+
                             </button>
 
                             <span class="patch-editor-separator"></span>
@@ -255,7 +397,9 @@
                                 data-command="insertUnorderedList"
                                 title="Lista con viñetas"
                             >
+
                                 <i class="fa fa-list-ul"></i>
+
                             </button>
 
                             <button
@@ -264,7 +408,9 @@
                                 data-command="insertOrderedList"
                                 title="Lista numerada"
                             >
+
                                 <i class="fa fa-list-ol"></i>
+
                             </button>
 
                             <span class="patch-editor-separator"></span>
@@ -275,7 +421,9 @@
                                 data-command="removeFormat"
                                 title="Quitar formato"
                             >
+
                                 <i class="fa fa-eraser"></i>
+
                             </button>
 
                         </div>
@@ -327,7 +475,9 @@
                                 data-command="bold"
                                 title="Negrita"
                             >
+
                                 <i class="fa fa-bold"></i>
+
                             </button>
 
                             <button
@@ -336,7 +486,9 @@
                                 data-command="italic"
                                 title="Cursiva"
                             >
+
                                 <i class="fa fa-italic"></i>
+
                             </button>
 
                             <span class="patch-editor-separator"></span>
@@ -347,7 +499,9 @@
                                 data-command="insertUnorderedList"
                                 title="Lista con viñetas"
                             >
+
                                 <i class="fa fa-list-ul"></i>
+
                             </button>
 
                             <button
@@ -356,7 +510,9 @@
                                 data-command="insertOrderedList"
                                 title="Lista numerada"
                             >
+
                                 <i class="fa fa-list-ol"></i>
+
                             </button>
 
                             <span class="patch-editor-separator"></span>
@@ -367,7 +523,9 @@
                                 data-command="removeFormat"
                                 title="Quitar formato"
                             >
+
                                 <i class="fa fa-eraser"></i>
+
                             </button>
 
                         </div>
@@ -411,6 +569,7 @@
                     <div class="patch-image-upload">
 
                         <!-- Input real para seleccionar archivo -->
+
                         <input
                             type="file"
                             id="campoImagen"
@@ -420,6 +579,7 @@
 
 
                         <!-- Área de arrastrar y soltar -->
+
                         <div
                             class="patch-image-dropzone"
                             id="imagenDropzone"
@@ -434,11 +594,15 @@
                             <div class="patch-image-dropzone-content">
 
                                 <strong>
+
                                     Arrastra una imagen aquí
+
                                 </strong>
 
                                 <span>
+
                                     o selecciona una imagen desde tu equipo
+
                                 </span>
 
                                 <button
@@ -446,8 +610,11 @@
                                     class="patch-btn-secondary"
                                     id="btnSeleccionarImagen"
                                 >
+
                                     <i class="fa fa-image"></i>
+
                                     Seleccionar imagen
+
                                 </button>
 
                             </div>
@@ -463,6 +630,7 @@
 
 
                         <!-- Vista previa -->
+
                         <div
                             class="patch-image-preview"
                             id="imagenPreviewContainer"
@@ -472,7 +640,9 @@
                             <div class="patch-image-preview-header">
 
                                 <strong>
+
                                     Vista previa
+
                                 </strong>
 
                                 <button
@@ -481,8 +651,11 @@
                                     id="btnQuitarImagen"
                                     title="Quitar imagen"
                                 >
+
                                     <i class="fa fa-trash"></i>
+
                                     Quitar imagen
+
                                 </button>
 
                             </div>
@@ -517,7 +690,17 @@
 
                 <div class="patch-form-row">
 
-                    <div class="patch-form-group">
+                    <!--
+                    FECHA DE CIERRE
+
+                    Se conserva el campo y su funcionalidad,
+                    pero actualmente permanece oculto.
+                    -->
+
+                    <div
+                        class="patch-form-group"
+                        hidden
+                    >
 
                         <label class="patch-form-label">
 
@@ -533,6 +716,8 @@
 
                     </div>
 
+
+                    <!-- ESTADO -->
 
                     <div class="patch-form-group">
 
@@ -648,7 +833,8 @@ document.querySelectorAll('.patch-editor').forEach(function(editor) {
 
         boton.addEventListener('click', function() {
 
-            const comando = boton.dataset.command;
+            const comando =
+                boton.dataset.command;
 
             contenido.focus();
 

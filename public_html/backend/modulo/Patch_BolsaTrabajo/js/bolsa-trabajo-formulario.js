@@ -8,9 +8,7 @@
 // ==========================
 
 let imagenSeleccionada = null;
-
 let imagenExistente = '';
-
 let eliminarImagenExistente = false;
 
 
@@ -47,6 +45,23 @@ const requiredImagen =
 
 
 // ==========================
+// Nuevos campos de vacante
+// ==========================
+
+const campoDescripcion =
+    document.getElementById('campoDescripcion');
+
+const campoUbicacion =
+    document.getElementById('campoUbicacion');
+
+const campoTipoJornada =
+    document.getElementById('campoTipoJornada');
+
+const campoModalidad =
+    document.getElementById('campoModalidad');
+
+
+// ==========================
 // Abrir modal nueva vacante
 // ==========================
 
@@ -54,14 +69,63 @@ function abrirModalNueva() {
 
     modoFormulario = 'crear';
 
-    tituloModal.textContent = 'Nueva vacante';
+    tituloModal.textContent =
+        'Nueva vacante';
 
     formVacante.reset();
 
     campoId.value = '';
 
 
-    // Los campos contenteditable no se limpian con form.reset()
+    // ==========================
+    // Limpiar descripción
+    // ==========================
+
+    if (campoDescripcion) {
+
+        campoDescripcion.value = '';
+
+    }
+
+
+    // ==========================
+    // Ubicación predeterminada
+    // ==========================
+
+    if (campoUbicacion) {
+
+        campoUbicacion.value =
+            'San Luis Potosí, S.L.P.';
+
+    }
+
+
+    // ==========================
+    // Limpiar tipo de jornada
+    // ==========================
+
+    if (campoTipoJornada) {
+
+        campoTipoJornada.value = '';
+
+    }
+
+
+    // ==========================
+    // Limpiar modalidad
+    // ==========================
+
+    if (campoModalidad) {
+
+        campoModalidad.value = '';
+
+    }
+
+
+    // ==========================
+    // Los campos contenteditable
+    // no se limpian con form.reset()
+    // ==========================
 
     campoOferta.innerHTML = '';
 
@@ -70,10 +134,16 @@ function abrirModalNueva() {
     campoResponsabilidades.innerHTML = '';
 
 
+    // ==========================
+    // Estado inicial
+    // ==========================
+
     campoActivo.checked = true;
 
 
+    // ==========================
     // Reiniciar estado de imagen
+    // ==========================
 
     imagenSeleccionada = null;
 
@@ -81,30 +151,41 @@ function abrirModalNueva() {
 
     eliminarImagenExistente = false;
 
-
     limpiarVistaImagen();
 
 
-    // Estado inicial del toggle
+    // ==========================
+    // Reiniciar Solo Imagen
+    // ==========================
 
     campoSoloImagen.checked = false;
 
     actualizarEstadoSoloImagen();
 
 
+    // ==========================
+    // Mostrar modal
+    // ==========================
+
     modalVacante.classList.add('active');
 
-    modalVacante.setAttribute('aria-hidden', 'false');
+    modalVacante.setAttribute(
+        'aria-hidden',
+        'false'
+    );
 
     document.body.style.overflow = 'hidden';
 
+
+    // ==========================
+    // Enfocar título
+    // ==========================
 
     setTimeout(function() {
 
         campoTitulo.focus();
 
     }, 150);
-
 }
 
 
@@ -116,17 +197,74 @@ function abrirModalEditar(vacante) {
 
     modoFormulario = 'editar';
 
-    tituloModal.textContent = 'Editar vacante';
+    tituloModal.textContent =
+        'Editar vacante';
 
 
-    campoId.value = vacante.id;
+    // ==========================
+    // Datos básicos
+    // ==========================
 
-    campoTitulo.value = vacante.titulo || '';
+    campoId.value =
+        vacante.id || '';
+
+    campoTitulo.value =
+        vacante.titulo || '';
 
 
-    // Los editores son contenteditable,
-    // por lo que utilizamos innerHTML
-    // para conservar el formato guardado.
+    // ==========================
+    // Descripción
+    // ==========================
+
+    if (campoDescripcion) {
+
+        campoDescripcion.value =
+            vacante.descripcion || '';
+
+    }
+
+
+    // ==========================
+    // Ubicación
+    // ==========================
+
+    if (campoUbicacion) {
+
+        campoUbicacion.value =
+            vacante.ubicacion || '';
+
+    }
+
+
+    // ==========================
+    // Tipo de jornada
+    // ==========================
+
+    if (campoTipoJornada) {
+
+        campoTipoJornada.value =
+            vacante.tipo_jornada || '';
+
+    }
+
+
+    // ==========================
+    // Modalidad
+    // ==========================
+
+    if (campoModalidad) {
+
+        campoModalidad.value =
+            vacante.modalidad || '';
+
+    }
+
+
+    // ==========================
+    // Contenido enriquecido
+    // ==========================
+    // Se utiliza innerHTML para
+    // conservar formato HTML.
 
     campoOferta.innerHTML =
         vacante.lo_que_se_ofrece || '';
@@ -138,9 +276,22 @@ function abrirModalEditar(vacante) {
         vacante.responsabilidades || '';
 
 
-    campoFechaCierre.value =
-        fechaParaInput(vacante.fecha_cierre);
+    // ==========================
+    // Fecha
+    // ==========================
+    // El campo permanece oculto
+    // visualmente, pero continúa
+    // cargándose y enviándose.
 
+    campoFechaCierre.value =
+        fechaParaInput(
+            vacante.fecha_cierre
+        );
+
+
+    // ==========================
+    // Estado
+    // ==========================
 
     campoActivo.checked =
         Number(vacante.activo) === 1;
@@ -158,7 +309,9 @@ function abrirModalEditar(vacante) {
     eliminarImagenExistente = false;
 
 
-    // Mostrar imagen existente si existe
+    // ==========================
+    // Mostrar imagen existente
+    // ==========================
 
     if (imagenExistente) {
 
@@ -173,28 +326,39 @@ function abrirModalEditar(vacante) {
     }
 
 
-    // Estado del toggle Solo Imagen
+    // ==========================
+    // Estado Solo Imagen
+    // ==========================
 
     campoSoloImagen.checked =
         Number(vacante.solo_imagen) === 1;
 
-
     actualizarEstadoSoloImagen();
 
 
+    // ==========================
+    // Mostrar modal
+    // ==========================
+
     modalVacante.classList.add('active');
 
-    modalVacante.setAttribute('aria-hidden', 'false');
+    modalVacante.setAttribute(
+        'aria-hidden',
+        'false'
+    );
 
     document.body.style.overflow = 'hidden';
 
+
+    // ==========================
+    // Enfocar título
+    // ==========================
 
     setTimeout(function() {
 
         campoTitulo.focus();
 
     }, 150);
-
 }
 
 
@@ -204,19 +368,30 @@ function abrirModalEditar(vacante) {
 
 function cerrarModal() {
 
-    modalVacante.classList.remove('active');
+    modalVacante.classList.remove(
+        'active'
+    );
 
-    modalVacante.setAttribute('aria-hidden', 'true');
+    modalVacante.setAttribute(
+        'aria-hidden',
+        'true'
+    );
 
     document.body.style.overflow = '';
 
+
+    // ==========================
+    // Reiniciar formulario
+    // ==========================
 
     formVacante.reset();
 
     campoId.value = '';
 
 
-    // Limpiar manualmente los campos contenteditable
+    // ==========================
+    // Limpiar editores
+    // ==========================
 
     campoOferta.innerHTML = '';
 
@@ -225,7 +400,38 @@ function cerrarModal() {
     campoResponsabilidades.innerHTML = '';
 
 
+    // ==========================
+    // Limpiar nuevos campos
+    // ==========================
+
+    if (campoDescripcion) {
+
+        campoDescripcion.value = '';
+
+    }
+
+    if (campoUbicacion) {
+
+        campoUbicacion.value = '';
+
+    }
+
+    if (campoTipoJornada) {
+
+        campoTipoJornada.value = '';
+
+    }
+
+    if (campoModalidad) {
+
+        campoModalidad.value = '';
+
+    }
+
+
+    // ==========================
     // Reiniciar imagen
+    // ==========================
 
     imagenSeleccionada = null;
 
@@ -233,13 +439,16 @@ function cerrarModal() {
 
     eliminarImagenExistente = false;
 
-
     limpiarVistaImagen();
+
+
+    // ==========================
+    // Reiniciar Solo Imagen
+    // ==========================
 
     campoSoloImagen.checked = false;
 
     actualizarEstadoSoloImagen();
-
 }
 
 
@@ -254,33 +463,36 @@ function actualizarEstadoSoloImagen() {
 
 
     const editores = [
-
         campoOferta,
-
         campoRequisitos,
-
         campoResponsabilidades
-
     ];
 
 
     // ==========================
-    // Habilitar / deshabilitar editores
+    // Habilitar / deshabilitar
+    // editores
     // ==========================
 
     editores.forEach(function(editor) {
 
         if (!editor) {
+
             return;
+
         }
 
 
         editor.contentEditable =
-            soloImagen ? 'false' : 'true';
+            soloImagen
+                ? 'false'
+                : 'true';
 
 
         const contenedor =
-            editor.closest('.patch-editor');
+            editor.closest(
+                '.patch-editor'
+            );
 
 
         if (contenedor) {
@@ -299,7 +511,8 @@ function actualizarEstadoSoloImagen() {
 
             botones.forEach(function(boton) {
 
-                boton.disabled = soloImagen;
+                boton.disabled =
+                    soloImagen;
 
             });
 
@@ -331,7 +544,9 @@ function actualizarEstadoSoloImagen() {
     if (requiredOferta) {
 
         requiredOferta.style.display =
-            soloImagen ? 'none' : 'inline';
+            soloImagen
+                ? 'none'
+                : 'inline';
 
     }
 
@@ -339,7 +554,9 @@ function actualizarEstadoSoloImagen() {
     if (requiredRequisitos) {
 
         requiredRequisitos.style.display =
-            soloImagen ? 'none' : 'inline';
+            soloImagen
+                ? 'none'
+                : 'inline';
 
     }
 
@@ -347,7 +564,9 @@ function actualizarEstadoSoloImagen() {
     if (requiredResponsabilidades) {
 
         requiredResponsabilidades.style.display =
-            soloImagen ? 'none' : 'inline';
+            soloImagen
+                ? 'none'
+                : 'inline';
 
     }
 
@@ -359,7 +578,9 @@ function actualizarEstadoSoloImagen() {
     if (requiredImagen) {
 
         requiredImagen.style.display =
-            soloImagen ? 'inline' : 'none';
+            soloImagen
+                ? 'inline'
+                : 'none';
 
     }
 
@@ -367,13 +588,16 @@ function actualizarEstadoSoloImagen() {
 
 
 // ==========================
-// Mostrar vista previa de imagen nueva
+// Mostrar vista previa
+// imagen nueva
 // ==========================
 
 function mostrarVistaImagenNueva(file) {
 
     if (!file) {
+
         return;
+
     }
 
 
@@ -382,11 +606,51 @@ function mostrarVistaImagenNueva(file) {
     eliminarImagenExistente = false;
 
 
+    // ==========================
+    // Crear URL temporal
+    // ==========================
+
     const url =
         URL.createObjectURL(file);
 
 
-    campoImagenPreview.src = url;
+    // ==========================
+    // Liberar URL anterior
+    // si existía una vista previa
+    // generada previamente.
+    // ==========================
+
+    const urlAnterior =
+        campoImagenPreview.dataset
+            .previewUrl || '';
+
+
+    if (urlAnterior) {
+
+        try {
+
+            URL.revokeObjectURL(
+                urlAnterior
+            );
+
+        } catch (error) {
+
+            console.warn(
+                'No fue posible liberar la vista previa anterior.',
+                error
+            );
+
+        }
+
+    }
+
+
+    campoImagenPreview.dataset.previewUrl =
+        url;
+
+
+    campoImagenPreview.src =
+        url;
 
     campoImagenPreview.alt =
         'Vista previa de la imagen seleccionada';
@@ -396,10 +660,12 @@ function mostrarVistaImagenNueva(file) {
         file.name;
 
 
-    imagenPreviewContainer.hidden = false;
+    imagenPreviewContainer.hidden =
+        false;
 
 
-    imagenDropzone.style.display = 'none';
+    imagenDropzone.style.display =
+        'none';
 
 }
 
@@ -408,7 +674,9 @@ function mostrarVistaImagenNueva(file) {
 // Mostrar imagen existente
 // ==========================
 
-function mostrarVistaImagenExistente(urlImagen) {
+function mostrarVistaImagenExistente(
+    urlImagen
+) {
 
     if (!urlImagen) {
 
@@ -419,7 +687,8 @@ function mostrarVistaImagenExistente(urlImagen) {
     }
 
 
-    let urlFinal = urlImagen;
+    let urlFinal =
+        urlImagen;
 
 
     try {
@@ -438,6 +707,39 @@ function mostrarVistaImagenExistente(urlImagen) {
         );
 
     }
+
+
+    // ==========================
+    // No es una vista previa local
+    // ==========================
+
+    const urlAnterior =
+        campoImagenPreview.dataset
+            .previewUrl || '';
+
+
+    if (urlAnterior) {
+
+        try {
+
+            URL.revokeObjectURL(
+                urlAnterior
+            );
+
+        } catch (error) {
+
+            console.warn(
+                'No fue posible liberar la vista previa anterior.',
+                error
+            );
+
+        }
+
+    }
+
+
+    campoImagenPreview.dataset.previewUrl =
+        '';
 
 
     campoImagenPreview.src =
@@ -467,12 +769,48 @@ function mostrarVistaImagenExistente(urlImagen) {
 
 function limpiarVistaImagen() {
 
-    campoImagenPreview.src = '';
+    // ==========================
+    // Liberar URL temporal
+    // ==========================
 
-    campoImagenPreview.alt = '';
+    const urlAnterior =
+        campoImagenPreview.dataset
+            .previewUrl || '';
 
 
-    campoImagenNombre.textContent = '';
+    if (urlAnterior) {
+
+        try {
+
+            URL.revokeObjectURL(
+                urlAnterior
+            );
+
+        } catch (error) {
+
+            console.warn(
+                'No fue posible liberar la vista previa anterior.',
+                error
+            );
+
+        }
+
+    }
+
+
+    campoImagenPreview.dataset.previewUrl =
+        '';
+
+
+    campoImagenPreview.src =
+        '';
+
+    campoImagenPreview.alt =
+        '';
+
+
+    campoImagenNombre.textContent =
+        '';
 
 
     imagenPreviewContainer.hidden =
@@ -485,9 +823,61 @@ function limpiarVistaImagen() {
 
     if (campoImagen) {
 
-        campoImagen.value = '';
+        campoImagen.value =
+            '';
 
     }
+
+
+    if (imagenDropzone) {
+
+        imagenDropzone.classList.remove(
+            'dragover'
+        );
+
+    }
+
+}
+
+
+// ==========================
+// Validar imagen
+// ==========================
+
+function validarImagen(file) {
+
+    if (!file) {
+
+        return false;
+
+    }
+
+
+    const tiposPermitidos = [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+    ];
+
+
+    if (
+        !file.type ||
+        !tiposPermitidos.includes(
+            file.type
+        )
+    ) {
+
+        mostrarToast(
+            'La imagen debe estar en formato JPG, PNG o WEBP.',
+            true
+        );
+
+        return false;
+
+    }
+
+
+    return true;
 
 }
 
@@ -499,7 +889,9 @@ function limpiarVistaImagen() {
 function seleccionarImagen(file) {
 
     if (!file) {
+
         return;
+
     }
 
 
@@ -507,23 +899,14 @@ function seleccionarImagen(file) {
     // Validar tipo
     // ==========================
 
-    const tiposPermitidos = [
+    if (!validarImagen(file)) {
 
-        'image/jpeg',
+        if (campoImagen) {
 
-        'image/png',
+            campoImagen.value =
+                '';
 
-        'image/webp'
-
-    ];
-
-
-    if (!tiposPermitidos.includes(file.type)) {
-
-        mostrarToast(
-            'La imagen debe estar en formato JPG, PNG o WEBP.',
-            true
-        );
+        }
 
         return;
 
@@ -531,13 +914,28 @@ function seleccionarImagen(file) {
 
 
     // ==========================
-    // Validar que sea una sola imagen
+    // Solo una imagen
     // ==========================
 
-    imagenSeleccionada = file;
+    imagenSeleccionada =
+        file;
 
 
-    mostrarVistaImagenNueva(file);
+    // ==========================
+    // Al seleccionar una imagen
+    // nueva, la imagen anterior
+    // deja de marcarse para eliminar.
+    // editar.php se encargará de
+    // reemplazarla correctamente.
+    // ==========================
+
+    eliminarImagenExistente =
+        false;
+
+
+    mostrarVistaImagenNueva(
+        file
+    );
 
 }
 
@@ -546,206 +944,257 @@ function seleccionarImagen(file) {
 // Botón seleccionar imagen
 // ==========================
 
-btnSeleccionarImagen.addEventListener(
-    'click',
-    function(e) {
+if (btnSeleccionarImagen) {
 
-        e.preventDefault();
+    btnSeleccionarImagen.addEventListener(
+        'click',
+        function(e) {
 
-        campoImagen.click();
+            e.preventDefault();
 
-    }
-);
+            campoImagen.click();
+
+        }
+    );
+
+}
 
 
 // ==========================
 // Input de imagen
 // ==========================
 
-campoImagen.addEventListener(
-    'change',
-    function() {
+if (campoImagen) {
 
-        if (
-            this.files &&
-            this.files.length > 0
-        ) {
+    campoImagen.addEventListener(
+        'change',
+        function() {
 
-            seleccionarImagen(
-                this.files[0]
-            );
+            if (
+                this.files &&
+                this.files.length > 0
+            ) {
+
+                seleccionarImagen(
+                    this.files[0]
+                );
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 // ==========================
 // Arrastrar imagen
 // ==========================
 
-imagenDropzone.addEventListener(
-    'dragover',
-    function(e) {
+if (imagenDropzone) {
 
-        e.preventDefault();
+    imagenDropzone.addEventListener(
+        'dragover',
+        function(e) {
 
-        e.stopPropagation();
+            e.preventDefault();
 
-
-        imagenDropzone.classList.add(
-            'dragover'
-        );
-
-    }
-);
+            e.stopPropagation();
 
 
-imagenDropzone.addEventListener(
-    'dragleave',
-    function(e) {
-
-        e.preventDefault();
-
-        e.stopPropagation();
-
-
-        imagenDropzone.classList.remove(
-            'dragover'
-        );
-
-    }
-);
-
-
-imagenDropzone.addEventListener(
-    'drop',
-    function(e) {
-
-        e.preventDefault();
-
-        e.stopPropagation();
-
-
-        imagenDropzone.classList.remove(
-            'dragover'
-        );
-
-
-        const archivos =
-            e.dataTransfer.files;
-
-
-        if (
-            !archivos ||
-            archivos.length === 0
-        ) {
-
-            return;
+            imagenDropzone.classList.add(
+                'dragover'
+            );
 
         }
+    );
 
 
-        // Solo permitimos una imagen
+    imagenDropzone.addEventListener(
+        'dragleave',
+        function(e) {
 
-        seleccionarImagen(
-            archivos[0]
-        );
+            e.preventDefault();
 
-    }
-);
+            e.stopPropagation();
+
+
+            imagenDropzone.classList.remove(
+                'dragover'
+            );
+
+        }
+    );
+
+
+    imagenDropzone.addEventListener(
+        'drop',
+        function(e) {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+
+            imagenDropzone.classList.remove(
+                'dragover'
+            );
+
+
+            const archivos =
+                e.dataTransfer.files;
+
+
+            if (
+                !archivos ||
+                archivos.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            // ==========================
+            // Solamente tomamos el
+            // primer archivo.
+            // ==========================
+
+            seleccionarImagen(
+                archivos[0]
+            );
+
+        }
+    );
+
+}
 
 
 // ==========================
 // Quitar imagen
 // ==========================
 
-btnQuitarImagen.addEventListener(
-    'click',
-    function(e) {
+if (btnQuitarImagen) {
 
-        e.preventDefault();
+    btnQuitarImagen.addEventListener(
+        'click',
+        function(e) {
+
+            e.preventDefault();
 
 
-        if (imagenExistente) {
+            // ==========================
+            // Si había una imagen guardada
+            // en BD, marcarla para eliminar.
+            // ==========================
 
-            eliminarImagenExistente = true;
+            if (imagenExistente) {
+
+                eliminarImagenExistente =
+                    true;
+
+            }
+
+
+            // ==========================
+            // La nueva imagen también
+            // queda eliminada de la selección.
+            // ==========================
+
+            imagenSeleccionada =
+                null;
+
+
+            limpiarVistaImagen();
 
         }
+    );
 
-
-        imagenSeleccionada = null;
-
-
-        limpiarVistaImagen();
-
-    }
-);
+}
 
 
 // ==========================
-// Eventos del formulario
-// ==========================
-
 // Abrir modal nueva vacante
+// ==========================
 
-btnNuevaVacante.addEventListener(
-    'click',
-    function(e) {
+if (btnNuevaVacante) {
 
-        e.preventDefault();
+    btnNuevaVacante.addEventListener(
+        'click',
+        function(e) {
 
-        abrirModalNueva();
+            e.preventDefault();
 
-    }
-);
-
-
-// Cerrar modal
-
-btnCerrarModal.addEventListener(
-    'click',
-    cerrarModal
-);
-
-
-btnCancelarModal.addEventListener(
-    'click',
-    cerrarModal
-);
-
-
-// Cerrar modal al hacer click fuera
-
-modalVacante.addEventListener(
-    'click',
-    function(e) {
-
-        if (e.target === modalVacante) {
-
-            cerrarModal();
+            abrirModalNueva();
 
         }
+    );
 
-    }
-);
+}
 
 
-// Cerrar modal con tecla Escape
+// ==========================
+// Cerrar modal
+// ==========================
+
+if (btnCerrarModal) {
+
+    btnCerrarModal.addEventListener(
+        'click',
+        cerrarModal
+    );
+
+}
+
+
+if (btnCancelarModal) {
+
+    btnCancelarModal.addEventListener(
+        'click',
+        cerrarModal
+    );
+
+}
+
+
+// ==========================
+// Cerrar al hacer click fuera
+// ==========================
+
+if (modalVacante) {
+
+    modalVacante.addEventListener(
+        'click',
+        function(e) {
+
+            if (
+                e.target === modalVacante
+            ) {
+
+                cerrarModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================
+// Cerrar con Escape
+// ==========================
 
 document.addEventListener(
     'keydown',
     function(e) {
 
         if (
-
             e.key === 'Escape' &&
-
+            modalVacante &&
             modalVacante.classList.contains(
                 'active'
             )
-
         ) {
 
             cerrarModal();
@@ -760,14 +1209,18 @@ document.addEventListener(
 // Cambio de Solo Imagen
 // ==========================
 
-campoSoloImagen.addEventListener(
-    'change',
-    function() {
+if (campoSoloImagen) {
 
-        actualizarEstadoSoloImagen();
+    campoSoloImagen.addEventListener(
+        'change',
+        function() {
 
-    }
-);
+            actualizarEstadoSoloImagen();
+
+        }
+    );
+
+}
 
 
 // ==========================
@@ -781,6 +1234,10 @@ formVacante.addEventListener(
         e.preventDefault();
 
 
+        // ==========================
+        // Estado actual
+        // ==========================
+
         const soloImagen =
             campoSoloImagen.checked;
 
@@ -789,22 +1246,54 @@ formVacante.addEventListener(
             campoTitulo.value.trim();
 
 
-        // Los campos son contenteditable,
-        // por lo que utilizamos innerHTML
-        // para conservar negritas, cursivas y listas.
+        // ==========================
+        // Nuevos campos
+        // ==========================
+
+        const descripcion =
+            campoDescripcion
+                ? campoDescripcion.value.trim()
+                : '';
+
+
+        const ubicacion =
+            campoUbicacion
+                ? campoUbicacion.value.trim()
+                : '';
+
+
+        const tipoJornada =
+            campoTipoJornada
+                ? campoTipoJornada.value.trim()
+                : '';
+
+
+        const modalidad =
+            campoModalidad
+                ? campoModalidad.value.trim()
+                : '';
+
+
+        // ==========================
+        // Obtener HTML de editores
+        // ==========================
+        // Se conserva el formato:
+        // negritas, cursivas y listas.
 
         const oferta =
             campoOferta.innerHTML.trim();
 
+
         const requisitos =
             campoRequisitos.innerHTML.trim();
+
 
         const responsabilidades =
             campoResponsabilidades.innerHTML.trim();
 
 
         // ==========================
-        // Validaciones
+        // Validar título
         // ==========================
 
         if (!titulo) {
@@ -822,8 +1311,75 @@ formVacante.addEventListener(
 
 
         // ==========================
-        // Validar textos solamente
-        // cuando NO es Solo Imagen
+        // Validar ubicación
+        // ==========================
+
+        if (!ubicacion) {
+
+            mostrarToast(
+                'Ingresa la ubicación de la vacante.',
+                true
+            );
+
+            if (campoUbicacion) {
+
+                campoUbicacion.focus();
+
+            }
+
+            return;
+
+        }
+
+
+        // ==========================
+        // Validar tipo de jornada
+        // ==========================
+
+        if (!tipoJornada) {
+
+            mostrarToast(
+                'Selecciona el tipo de jornada.',
+                true
+            );
+
+            if (campoTipoJornada) {
+
+                campoTipoJornada.focus();
+
+            }
+
+            return;
+
+        }
+
+
+        // ==========================
+        // Validar modalidad
+        // ==========================
+
+        if (!modalidad) {
+
+            mostrarToast(
+                'Selecciona la modalidad.',
+                true
+            );
+
+            if (campoModalidad) {
+
+                campoModalidad.focus();
+
+            }
+
+            return;
+
+        }
+
+
+        // ==========================
+        // Validar textos
+        // solamente cuando NO es
+        // modo Solo Imagen
         // ==========================
 
         if (!soloImagen) {
@@ -873,8 +1429,8 @@ formVacante.addEventListener(
 
 
         // ==========================
-        // Validar imagen en
-        // modo Solo Imagen
+        // Validar imagen en modo
+        // Solo Imagen
         // ==========================
 
         if (
@@ -894,18 +1450,76 @@ formVacante.addEventListener(
 
 
         // ==========================
-        // Datos para la API
+        // Validar que si se eliminó
+        // la imagen en modo Solo Imagen
+        // exista una nueva.
+        // ==========================
+
+        if (
+            soloImagen &&
+            eliminarImagenExistente &&
+            !imagenSeleccionada
+        ) {
+
+            mostrarToast(
+                'Debes seleccionar una imagen para una vacante de solo imagen.',
+                true
+            );
+
+            return;
+
+        }
+
+
+        // ==========================
+        // Crear FormData
         // ==========================
 
         const datos =
             new FormData();
 
 
+        // ==========================
+        // Datos básicos
+        // ==========================
+
         datos.append(
             'titulo',
             titulo
         );
 
+
+        // ==========================
+        // Nuevos campos
+        // ==========================
+
+        datos.append(
+            'descripcion',
+            descripcion
+        );
+
+
+        datos.append(
+            'ubicacion',
+            ubicacion
+        );
+
+
+        datos.append(
+            'tipo_jornada',
+            tipoJornada
+        );
+
+
+        datos.append(
+            'modalidad',
+            modalidad
+        );
+
+
+        // ==========================
+        // Contenido enriquecido
+        // ==========================
 
         datos.append(
             'lo_que_se_ofrece',
@@ -925,11 +1539,22 @@ formVacante.addEventListener(
         );
 
 
+        // ==========================
+        // Fecha de cierre
+        // ==========================
+        // El campo está oculto en el
+        // modal, pero se conserva su
+        // funcionalidad.
+
         datos.append(
             'fecha_cierre',
             campoFechaCierre.value
         );
 
+
+        // ==========================
+        // Estado
+        // ==========================
 
         datos.append(
             'activo',
@@ -938,6 +1563,10 @@ formVacante.addEventListener(
                 : '0'
         );
 
+
+        // ==========================
+        // Modo Solo Imagen
+        // ==========================
 
         datos.append(
             'solo_imagen',
@@ -950,12 +1579,16 @@ formVacante.addEventListener(
         // ==========================
         // Imagen nueva
         // ==========================
+        // Solamente se envía cuando
+        // realmente se seleccionó una
+        // imagen nueva.
 
         if (imagenSeleccionada) {
 
             datos.append(
                 'imagen',
-                imagenSeleccionada
+                imagenSeleccionada,
+                imagenSeleccionada.name
             );
 
         }
@@ -964,9 +1597,19 @@ formVacante.addEventListener(
         // ==========================
         // Eliminar imagen existente
         // ==========================
+        // Solamente se envía cuando:
+        //
+        // 1. Existe una imagen anterior.
+        // 2. El usuario la quitó.
+        // 3. No se seleccionó una nueva.
+        //
+        // Si hay una nueva imagen,
+        // editar.php se encargará del
+        // reemplazo.
 
         if (
             eliminarImagenExistente &&
+            imagenExistente &&
             !imagenSeleccionada
         ) {
 
@@ -982,12 +1625,16 @@ formVacante.addEventListener(
         // Acción
         // ==========================
 
-        let accion = 'crear';
+        let accion =
+            'crear';
 
 
-        if (modoFormulario === 'editar') {
+        if (
+            modoFormulario === 'editar'
+        ) {
 
-            accion = 'editar';
+            accion =
+                'editar';
 
 
             datos.append(
@@ -1012,6 +1659,10 @@ formVacante.addEventListener(
         `;
 
 
+        // ==========================
+        // Enviar a API
+        // ==========================
+
         try {
 
             const respuesta =
@@ -1021,47 +1672,69 @@ formVacante.addEventListener(
                 );
 
 
-            if (!respuesta.ok) {
+            // ==========================
+            // Validar respuesta
+            // ==========================
+
+            if (
+                !respuesta ||
+                !respuesta.ok
+            ) {
 
                 throw new Error(
-
-                    respuesta.mensaje ||
-
-                    'No fue posible guardar la vacante.'
-
+                    respuesta &&
+                    respuesta.mensaje
+                        ? respuesta.mensaje
+                        : 'No fue posible guardar la vacante.'
                 );
 
             }
 
 
+            // ==========================
+            // Cerrar modal
+            // ==========================
+
             cerrarModal();
 
+
+            // ==========================
+            // Recargar listado
+            // ==========================
 
             await cargarVacantes();
 
 
+            // ==========================
+            // Mostrar mensaje
+            // ==========================
+
             mostrarToast(
-                respuesta.mensaje
+                respuesta.mensaje ||
+                'Vacante guardada correctamente.'
             );
 
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                'Error al guardar vacante:',
+                error
+            );
 
 
             mostrarToast(
-
                 error.message ||
-
-                'Ocurrió un error al guardar.',
-
+                'Ocurrió un error al guardar la vacante.',
                 true
-
             );
 
 
         } finally {
+
+            // ==========================
+            // Restaurar botón
+            // ==========================
 
             btnGuardarVacante.disabled =
                 false;
