@@ -32,7 +32,27 @@ function resumenTexto($texto, int $longitud = 155): string {
 }
 function limpiarContenidoRichText($contenido): string {
     $contenido = (string)($contenido ?? '');
-    $contenido = strip_tags($contenido, '<strong><b><em><i><ul><ol><li><p><br>');
+
+    // El editor contenteditable puede generar <div> al presionar Enter.
+    // Se convierten en <p> para conservar correctamente cada salto de línea.
+    $contenido = preg_replace(
+        '/<div\b[^>]*>/i',
+        '<p>',
+        $contenido
+    );
+
+    $contenido = preg_replace(
+        '/<\/div>/i',
+        '</p>',
+        $contenido
+    );
+
+    // Conservar únicamente las etiquetas utilizadas por el editor.
+    $contenido = strip_tags(
+        $contenido,
+        '<strong><b><em><i><ul><ol><li><p><br>'
+    );
+
     return trim($contenido);
 }
 function obtenerRutaImagen($urlImagen): string {
