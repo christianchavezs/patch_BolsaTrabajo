@@ -1116,21 +1116,20 @@ if (!$stmt) {
             </p>
 
 
-            <a
+            
+            <button
+                type="button"
                 class="boton-cv"
-                href="mailto:christianchavez394@gmail.com"
+                id="abrirModalCVGeneral"
             >
-
                 <span
                     class="icono-correo"
                     aria-hidden="true"
                 >
-
                     <svg
                         viewBox="0 0 24 24"
                         fill="none"
                     >
-
                         <rect
                             x="3"
                             y="5"
@@ -1138,19 +1137,14 @@ if (!$stmt) {
                             height="14"
                             rx="2"
                         />
-
                         <path
                             d="m4 7 8 6 8-6"
                         />
-
                     </svg>
-
                 </span>
 
-
                 Envíanos tu CV
-
-            </a>
+            </button>
 
 
         </div>
@@ -1180,6 +1174,10 @@ if (!$stmt) {
     </span>
 
 </footer>
+
+<?php
+require_once __DIR__ . "/partials/modal/modal_cv_general.php";
+?>
 
 
 <!-- =====================================================
