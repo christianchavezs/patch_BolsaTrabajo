@@ -41,6 +41,10 @@ $description = "";
             </div>
 
             <div class="patch-bolsa-header-actions">
+
+                <a href="Admin_Postulaciones.php" class="patch-btn-primary" id="btnMostrarPostulaciones">
+                    <i class="fa fa-users"></i> Mostrar Postulaciones
+                </a>
                 <a href="javascript:;" class="patch-btn-primary" id="btnMostrarArchivadas">
                     <i class="fa fa-archive"></i> Vacantes archivadas
                 </a>
