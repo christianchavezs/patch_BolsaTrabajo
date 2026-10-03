@@ -1,244 +1,306 @@
 <section class="patch-section">
 
-
-<div class="patch-section-title">
-    <div>
-        <h2>Vacantes con postulaciones</h2>
-        <p>Consulta rápidamente las vacantes que han recibido candidatos.</p>
+    <div class="patch-section-title">
+        <div>
+            <h2>Vacantes con postulaciones</h2>
+            <p>Consulta rápidamente las vacantes que han recibido candidatos.</p>
+        </div>
     </div>
-</div>
 
-<?php if (!empty($vacantesPostulaciones)): ?>
+    <?php if (!empty($vacantesPostulaciones)): ?>
 
-    <div class="patch-vacancies-grid">
+        <div class="patch-vacancies-grid">
 
-        <?php foreach ($vacantesPostulaciones as $vacante): ?>
+            <?php foreach ($vacantesPostulaciones as $vacante): ?>
 
-            <?php
-            $vacanteId = (int)($vacante['id'] ?? 0);
-            $vacanteTitulo = trim((string)($vacante['titulo'] ?? ''));
-            $vacanteUbicacion = trim((string)($vacante['ubicacion'] ?? ''));
-            $vacanteJornada = trim((string)($vacante['tipo_jornada'] ?? ''));
-            $vacanteModalidad = trim((string)($vacante['modalidad'] ?? ''));
+                <?php
 
-            $totalVacante = (int)($vacante['total_postulaciones'] ?? 0);
-            $pendientesVacante = (int)($vacante['pendientes'] ?? 0);
-            $enProcesoVacante = (int)($vacante['en_proceso'] ?? 0);
-            $entrevistasVacante = (int)($vacante['entrevistas'] ?? 0);
-            $aceptadosVacante = (int)($vacante['aceptados'] ?? 0);
-            $descartadosVacante = (int)($vacante['descartados'] ?? 0);
+                $vacanteId = (int)($vacante['id'] ?? 0);
 
-            $esArchivada = (int)($vacante['archivada'] ?? 0) === 1;
-            $esActiva = (int)($vacante['activo'] ?? 0) === 1;
+                $vacanteTitulo = trim(
+                    (string)($vacante['titulo'] ?? '')
+                );
 
-            if ($esArchivada) {
-                $estadoVacanteTexto = 'Archivada';
-                $estadoVacanteClase = 'archived';
-                $estadoVacanteIcono = 'fa-box-archive';
-            } elseif ($esActiva) {
-                $estadoVacanteTexto = 'Activa';
-                $estadoVacanteClase = 'active';
-                $estadoVacanteIcono = 'fa-circle-check';
-            } else {
-                $estadoVacanteTexto = 'Inactiva';
-                $estadoVacanteClase = 'inactive';
-                $estadoVacanteIcono = 'fa-circle-pause';
-            }
-            ?>
+                $vacanteUbicacion = trim(
+                    (string)($vacante['ubicacion'] ?? '')
+                );
 
-            <div
-                class="patch-vacancy-postulation-card"
-                data-vacante="<?php echo $vacanteId; ?>"
-                onclick="filtrarVacante(<?php echo $vacanteId; ?>)"
-                role="button"
-                tabindex="0"
-                aria-label="Filtrar postulaciones de <?php echo e($vacanteTitulo !== '' ? $vacanteTitulo : 'vacante'); ?>"
-                onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); filtrarVacante(<?php echo $vacanteId; ?>); }"
-            >
+                $vacanteJornada = trim(
+                    (string)($vacante['tipo_jornada'] ?? '')
+                );
 
-                <div class="patch-vacancy-postulation-header">
+                $vacanteModalidad = trim(
+                    (string)($vacante['modalidad'] ?? '')
+                );
 
-                    <div class="patch-vacancy-postulation-info">
+                $totalVacante = (int)(
+                    $vacante['total_postulaciones'] ?? 0
+                );
 
-                        <h3>
-                            <?php echo e($vacanteTitulo !== '' ? $vacanteTitulo : 'Vacante sin título'); ?>
-                        </h3>
+                $pendientesVacante = (int)(
+                    $vacante['pendientes'] ?? 0
+                );
 
-                        <?php if ($vacanteUbicacion !== ''): ?>
+                $enProcesoVacante = (int)(
+                    $vacante['en_proceso'] ?? 0
+                );
 
-                            <p>
-                                <i class="fa fa-location-dot"></i>
-                                <?php echo e($vacanteUbicacion); ?>
-                            </p>
+                $entrevistasVacante = (int)(
+                    $vacante['entrevistas'] ?? 0
+                );
 
-                        <?php endif; ?>
+                $aceptadosVacante = (int)(
+                    $vacante['aceptados'] ?? 0
+                );
+
+                $descartadosVacante = (int)(
+                    $vacante['descartados'] ?? 0
+                );
+
+                $esArchivada = (int)(
+                    $vacante['archivada'] ?? 0
+                ) === 1;
+
+                $esActiva = (int)(
+                    $vacante['activo'] ?? 0
+                ) === 1;
+
+                if ($esArchivada) {
+
+                    $estadoVacanteTexto = 'Archivada';
+                    $estadoVacanteClase = 'archived';
+                    $estadoVacanteIcono = 'fa-box-archive';
+
+                } elseif ($esActiva) {
+
+                    $estadoVacanteTexto = 'Activa';
+                    $estadoVacanteClase = 'active';
+                    $estadoVacanteIcono = 'fa-circle-check';
+
+                } else {
+
+                    $estadoVacanteTexto = 'Inactiva';
+                    $estadoVacanteClase = 'inactive';
+                    $estadoVacanteIcono = 'fa-circle-pause';
+
+                }
+
+                /*
+                 * La tarjeta abre directamente el dashboard
+                 * de postulaciones de la vacante seleccionada.
+                 *
+                 * Admin_Detalle_Postulacion.php funciona en dos modos:
+                 *
+                 * 1. ?id=ID
+                 *    Muestra el detalle individual de una postulación.
+                 *
+                 * 2. ?vacante=ID
+                 *    Muestra el dashboard de postulaciones
+                 *    correspondiente únicamente a esa vacante.
+                 */
+
+                $urlVacantePostulaciones =
+                    'Admin_Detalle_Postulacion.php?vacante=' .
+                    $vacanteId;
+
+                ?>
+
+                <div
+                    class="patch-vacancy-postulation-card"
+                    data-vacante="<?php echo $vacanteId; ?>"
+                    onclick="window.location.href='<?php echo e($urlVacantePostulaciones); ?>'"
+                    role="link"
+                    tabindex="0"
+                    aria-label="Ver postulaciones de <?php echo e($vacanteTitulo !== '' ? $vacanteTitulo : 'vacante'); ?>"
+                    onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.location.href='<?php echo e($urlVacantePostulaciones); ?>'; }"
+                >
+
+                    <div class="patch-vacancy-postulation-header">
+
+                        <div class="patch-vacancy-postulation-info">
+
+                            <h3>
+                                <?php echo e(
+                                    $vacanteTitulo !== ''
+                                        ? $vacanteTitulo
+                                        : 'Vacante sin título'
+                                ); ?>
+                            </h3>
+
+                            <?php if ($vacanteUbicacion !== ''): ?>
+
+                                <p>
+                                    <i class="fa fa-location-dot"></i>
+                                    <?php echo e($vacanteUbicacion); ?>
+                                </p>
+
+                            <?php endif; ?>
+
+                        </div>
+
+                        <div class="patch-vacancy-postulation-total">
+
+                            <strong>
+                                <?php echo $totalVacante; ?>
+                            </strong>
+
+                            <span>
+                                <?php echo $totalVacante === 1
+                                    ? 'postulación'
+                                    : 'postulaciones'; ?>
+                            </span>
+
+                        </div>
 
                     </div>
 
-                    <div class="patch-vacancy-postulation-total">
+                    <?php if (
+                        $vacanteJornada !== '' ||
+                        $vacanteModalidad !== ''
+                    ): ?>
 
-                        <strong>
-                            <?php echo $totalVacante; ?>
-                        </strong>
+                        <div class="patch-vacancy-postulation-meta">
+
+                            <?php if ($vacanteJornada !== ''): ?>
+
+                                <span>
+                                    <i class="fa fa-clock"></i>
+                                    <?php echo e($vacanteJornada); ?>
+                                </span>
+
+                            <?php endif; ?>
+
+                            <?php if ($vacanteModalidad !== ''): ?>
+
+                                <span>
+                                    <i class="fa fa-building"></i>
+                                    <?php echo e($vacanteModalidad); ?>
+                                </span>
+
+                            <?php endif; ?>
+
+                        </div>
+
+                    <?php endif; ?>
+
+                    <div class="patch-vacancy-postulation-status">
+
+                        <span
+                            class="patch-vacancy-status <?php echo e($estadoVacanteClase); ?>"
+                        >
+                            <i
+                                class="fa <?php echo e($estadoVacanteIcono); ?>"
+                            ></i>
+
+                            <?php echo e($estadoVacanteTexto); ?>
+                        </span>
+
+                    </div>
+
+                    <div class="patch-vacancy-postulation-stats">
+
+                        <div class="patch-vacancy-stat">
+
+                            <span class="patch-vacancy-stat-value">
+                                <?php echo $pendientesVacante; ?>
+                            </span>
+
+                            <span class="patch-vacancy-stat-label">
+                                Por revisar
+                            </span>
+
+                        </div>
+
+                        <div class="patch-vacancy-stat">
+
+                            <span class="patch-vacancy-stat-value">
+                                <?php echo $enProcesoVacante; ?>
+                            </span>
+
+                            <span class="patch-vacancy-stat-label">
+                                En proceso
+                            </span>
+
+                        </div>
+
+                        <div class="patch-vacancy-stat">
+
+                            <span class="patch-vacancy-stat-value">
+                                <?php echo $entrevistasVacante; ?>
+                            </span>
+
+                            <span class="patch-vacancy-stat-label">
+                                Entrevistas
+                            </span>
+
+                        </div>
+
+                        <div class="patch-vacancy-stat">
+
+                            <span class="patch-vacancy-stat-value">
+                                <?php echo $aceptadosVacante; ?>
+                            </span>
+
+                            <span class="patch-vacancy-stat-label">
+                                Aceptados
+                            </span>
+
+                        </div>
+
+                        <div class="patch-vacancy-stat">
+
+                            <span class="patch-vacancy-stat-value">
+                                <?php echo $descartadosVacante; ?>
+                            </span>
+
+                            <span class="patch-vacancy-stat-label">
+                                Descartados
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="patch-vacancy-postulation-footer">
 
                         <span>
-                            <?php echo $totalVacante === 1 ? 'postulación' : 'postulaciones'; ?>
+                            <i class="fa fa-users"></i>
+                            Ver postulaciones
                         </span>
+
+                        <i class="fa fa-arrow-right"></i>
 
                     </div>
 
                 </div>
 
-
-                <?php if ($vacanteJornada !== '' || $vacanteModalidad !== ''): ?>
-
-                    <div class="patch-vacancy-postulation-meta">
-
-                        <?php if ($vacanteJornada !== ''): ?>
-
-                            <span>
-                                <i class="fa fa-clock"></i>
-                                <?php echo e($vacanteJornada); ?>
-                            </span>
-
-                        <?php endif; ?>
-
-                        <?php if ($vacanteModalidad !== ''): ?>
-
-                            <span>
-                                <i class="fa fa-building"></i>
-                                <?php echo e($vacanteModalidad); ?>
-                            </span>
-
-                        <?php endif; ?>
-
-                    </div>
-
-                <?php endif; ?>
-
-
-                <div class="patch-vacancy-postulation-status">
-
-                    <span class="patch-vacancy-status <?php echo e($estadoVacanteClase); ?>">
-
-                        <i class="fa <?php echo e($estadoVacanteIcono); ?>"></i>
-
-                        <?php echo e($estadoVacanteTexto); ?>
-
-                    </span>
-
-                </div>
-
-
-                <div class="patch-vacancy-postulation-stats">
-
-                    <div class="patch-vacancy-stat">
-
-                        <span class="patch-vacancy-stat-value">
-                            <?php echo $pendientesVacante; ?>
-                        </span>
-
-                        <span class="patch-vacancy-stat-label">
-                            Por revisar
-                        </span>
-
-                    </div>
-
-
-                    <div class="patch-vacancy-stat">
-
-                        <span class="patch-vacancy-stat-value">
-                            <?php echo $enProcesoVacante; ?>
-                        </span>
-
-                        <span class="patch-vacancy-stat-label">
-                            En proceso
-                        </span>
-
-                    </div>
-
-
-                    <div class="patch-vacancy-stat">
-
-                        <span class="patch-vacancy-stat-value">
-                            <?php echo $entrevistasVacante; ?>
-                        </span>
-
-                        <span class="patch-vacancy-stat-label">
-                            Entrevistas
-                        </span>
-
-                    </div>
-
-
-                    <div class="patch-vacancy-stat">
-
-                        <span class="patch-vacancy-stat-value">
-                            <?php echo $aceptadosVacante; ?>
-                        </span>
-
-                        <span class="patch-vacancy-stat-label">
-                            Aceptados
-                        </span>
-
-                    </div>
-
-
-                    <div class="patch-vacancy-stat">
-
-                        <span class="patch-vacancy-stat-value">
-                            <?php echo $descartadosVacante; ?>
-                        </span>
-
-                        <span class="patch-vacancy-stat-label">
-                            Descartados
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="patch-vacancy-postulation-footer">
-
-                    <span>
-                        <i class="fa fa-filter"></i>
-                        Ver postulaciones
-                    </span>
-
-                    <i class="fa fa-arrow-right"></i>
-
-                </div>
-
-            </div>
-
-        <?php endforeach; ?>
-
-    </div>
-
-<?php else: ?>
-
-    <div class="patch-panel patch-empty-panel">
-
-        <div class="patch-empty-state">
-
-            <div class="patch-empty-icon">
-                <i class="fa fa-briefcase"></i>
-            </div>
-
-            <h3>
-                No hay vacantes con postulaciones
-            </h3>
-
-            <p>
-                Cuando una persona se postule a una vacante, aparecerá aquí el resumen correspondiente.
-            </p>
+            <?php endforeach; ?>
 
         </div>
 
-    </div>
+    <?php else: ?>
 
-<?php endif; ?>
+        <div class="patch-panel patch-empty-panel">
 
+            <div class="patch-empty-state">
+
+                <div class="patch-empty-icon">
+                    <i class="fa fa-briefcase"></i>
+                </div>
+
+                <h3>
+                    No hay vacantes con postulaciones
+                </h3>
+
+                <p>
+                    Cuando una persona se postule a una vacante,
+                    aparecerá aquí el resumen correspondiente.
+                </p>
+
+            </div>
+
+        </div>
+
+    <?php endif; ?>
 
 </section>
