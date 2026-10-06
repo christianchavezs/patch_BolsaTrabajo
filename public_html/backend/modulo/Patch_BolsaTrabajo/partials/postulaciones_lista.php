@@ -1,27 +1,18 @@
 <section class="patch-panel" id="panelPostulaciones">
 
     <div class="patch-panel-header">
-
         <div>
-
             <h2>Postulaciones a vacantes</h2>
-
             <p>
                 Consulta y administra las personas que han enviado una postulación a una vacante.
             </p>
-
         </div>
 
-        <div class="patch-panel-count">
-
+        <div class="patch-panel-count" id="contadorPostulaciones">
             <?php echo count($postulaciones); ?>
-
             <?php echo count($postulaciones) === 1 ? 'resultado' : 'resultados'; ?>
-
         </div>
-
     </div>
-
 
     <form
         method="GET"
@@ -31,7 +22,6 @@
     >
 
         <div class="patch-search-box">
-
             <i class="fa fa-search"></i>
 
             <input
@@ -42,12 +32,9 @@
                 placeholder="Buscar por nombre, correo, teléfono o vacante..."
                 autocomplete="off"
             >
-
         </div>
 
-
         <div class="patch-filter-group">
-
             <label for="filtroVacante">
                 Vacante
             </label>
@@ -56,7 +43,6 @@
                 name="vacante"
                 id="filtroVacante"
             >
-
                 <option value="0">
                     Todas las vacantes
                 </option>
@@ -66,26 +52,21 @@
                     <?php foreach ($vacantesPostulaciones as $vacante): ?>
 
                         <?php
-
                         $vacanteId = (int)($vacante['id'] ?? 0);
-
                         $vacanteTitulo = trim(
                             (string)($vacante['titulo'] ?? '')
                         );
-
                         ?>
 
                         <option
                             value="<?php echo $vacanteId; ?>"
                             <?php echo $filtroVacante === $vacanteId ? 'selected' : ''; ?>
                         >
-
                             <?php echo e(
                                 $vacanteTitulo !== ''
                                     ? $vacanteTitulo
                                     : 'Vacante sin título'
                             ); ?>
-
                         </option>
 
                     <?php endforeach; ?>
@@ -93,12 +74,9 @@
                 <?php endif; ?>
 
             </select>
-
         </div>
 
-
         <div class="patch-filter-group">
-
             <label for="filtroEstado">
                 Estado
             </label>
@@ -107,7 +85,6 @@
                 name="estado"
                 id="filtroEstado"
             >
-
                 <option value="">
                     Todos los estados
                 </option>
@@ -146,23 +123,16 @@
                 >
                     Descartado
                 </option>
-
             </select>
-
         </div>
-
 
         <button
             type="submit"
             class="patch-filter-button"
         >
-
             <i class="fa fa-filter"></i>
-
             Filtrar
-
         </button>
-
 
         <?php if ($buscar !== '' || $filtroVacante > 0 || $filtroEstado !== ''): ?>
 
@@ -171,17 +141,13 @@
                 class="patch-filter-clear"
                 onclick="limpiarFiltros()"
             >
-
                 <i class="fa fa-xmark"></i>
-
                 Limpiar
-
             </button>
 
         <?php endif; ?>
 
     </form>
-
 
     <?php if (!empty($postulaciones)): ?>
 
@@ -190,9 +156,7 @@
             <table class="patch-table">
 
                 <thead>
-
                     <tr>
-
                         <th>
                             Candidato
                         </th>
@@ -216,11 +180,8 @@
                         <th>
                             Acción
                         </th>
-
                     </tr>
-
                 </thead>
-
 
                 <tbody>
 
@@ -271,48 +232,39 @@
                         $estadoClaseActual =
                             estadoClase($estadoPostulacion);
 
-                        $urlDetallePostulacion =
-                            'Admin_Detalle_Postulacion.php?id=' .
-                            $postulacionId;
-
                         ?>
 
-
-                        <tr>
+                        <tr
+                            data-postulacion-id="<?php echo $postulacionId; ?>"
+                            data-estado="<?php echo e($estadoPostulacion); ?>"
+                        >
 
                             <td>
 
                                 <div class="patch-candidate">
 
                                     <div class="patch-candidate-avatar">
-
                                         <?php echo e(
                                             iniciales($nombrePostulante)
                                         ); ?>
-
                                     </div>
-
 
                                     <div class="patch-candidate-info">
 
                                         <strong>
-
                                             <?php echo e(
                                                 $nombrePostulante !== ''
                                                     ? $nombrePostulante
                                                     : 'Sin nombre'
                                             ); ?>
-
                                         </strong>
 
                                         <span>
-
                                             <?php echo e(
                                                 $correoPostulante !== ''
                                                     ? $correoPostulante
                                                     : 'Sin correo'
                                             ); ?>
-
                                         </span>
 
                                     </div>
@@ -321,25 +273,21 @@
 
                             </td>
 
-
                             <td>
 
                                 <div class="patch-vacancy-cell">
 
                                     <strong>
-
                                         <?php echo e(
                                             $vacantePostulacion !== ''
                                                 ? $vacantePostulacion
                                                 : 'Vacante sin título'
                                         ); ?>
-
                                     </strong>
 
                                 </div>
 
                             </td>
-
 
                             <td>
 
@@ -365,50 +313,42 @@
 
                             </td>
 
-
                             <td>
 
                                 <span class="patch-table-date">
-
                                     <?php echo formatearFecha(
                                         $fechaPostulacion
                                     ); ?>
-
                                 </span>
 
                             </td>
-
 
                             <td>
 
                                 <span
                                     class="patch-status <?php echo e($estadoClaseActual); ?>"
+                                    data-estado="<?php echo e($estadoPostulacion); ?>"
                                 >
-
                                     <?php echo e(
                                         $estadoTextoActual
                                     ); ?>
-
                                 </span>
 
                             </td>
-
 
                             <td>
 
                                 <?php if ($postulacionId > 0): ?>
 
-                                    <a
-                                        href="<?php echo e($urlDetallePostulacion); ?>"
+                                    <button
+                                        type="button"
                                         class="patch-action-button"
                                         title="Ver detalle de la postulación"
+                                        onclick="cargarPostulacion(<?php echo $postulacionId; ?>)"
                                     >
-
                                         <i class="fa fa-eye"></i>
-
                                         Ver detalle
-
-                                    </a>
+                                    </button>
 
                                 <?php else: ?>
 
@@ -416,11 +356,8 @@
                                         class="patch-table-muted"
                                         title="La postulación no tiene un identificador válido"
                                     >
-
                                         <i class="fa fa-circle-exclamation"></i>
-
                                         No disponible
-
                                     </span>
 
                                 <?php endif; ?>
@@ -437,17 +374,13 @@
 
         </div>
 
-
     <?php else: ?>
 
         <div class="patch-empty-state">
 
             <div class="patch-empty-icon">
-
                 <i class="fa fa-users"></i>
-
             </div>
-
 
             <?php if (
                 $buscar !== '' ||
@@ -468,11 +401,8 @@
                     class="patch-filter-button"
                     onclick="limpiarFiltros()"
                 >
-
                     <i class="fa fa-rotate-left"></i>
-
                     Limpiar filtros
-
                 </button>
 
             <?php else: ?>

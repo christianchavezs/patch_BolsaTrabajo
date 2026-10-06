@@ -17,48 +17,41 @@ function respuestaJSON(bool $ok, string $mensaje = '', $datos = []): void
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respuestaJSON(false, 'Método no permitido.');
 }
 
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+$estado = isset($_POST['estado']) ? trim((string)$_POST['estado']) : '';
+$comentarioSeguimiento = isset($_POST['comentario_seguimiento'])
+    ? trim((string)$_POST['comentario_seguimiento'])
+    : '';
 
 if ($id === false || $id === null || $id <= 0) {
     respuestaJSON(false, 'La postulación indicada no es válida.');
 }
 
+$estadosPermitidos = [
+    'nueva',
+    'en_proceso',
+    'entrevista',
+    'aceptado',
+    'descartado'
+];
+
+if (!in_array($estado, $estadosPermitidos, true)) {
+    respuestaJSON(false, 'El estado seleccionado no es válido.');
+}
+
 try {
 
     $sql = "
-        SELECT
-            p.id,
-            p.id_bolsa,
-            p.nombre_completo,
-            p.correo,
-            p.telefono,
-            p.cv,
-            p.comentarios,
-            p.estado,
-            p.fecha_postulacion,
-            p.updated_at,
-
-            b.token AS vacante_token,
-            b.titulo AS vacante_titulo,
-            b.descripcion AS vacante_descripcion,
-            b.ubicacion AS vacante_ubicacion,
-            b.tipo_jornada AS vacante_tipo_jornada,
-            b.modalidad AS vacante_modalidad,
-            b.lo_que_se_ofrece AS vacante_ofrece,
-            b.requisitos AS vacante_requisitos,
-            b.responsabilidades AS vacante_responsabilidades
-
-        FROM patch_postulaciones p
-
-        LEFT JOIN patch_BolsaTrabajo b
-            ON b.id = p.id_bolsa
-
-        WHERE p.id = ?
-
+        UPDATE patch_postulaciones
+        SET
+            estado = ?,
+            comentario_seguimiento = ?,
+            updated_at = NOW()
+        WHERE id = ?
         LIMIT 1
     ";
 
@@ -67,104 +60,115 @@ try {
     if (!$stmt) {
         respuestaJSON(
             false,
-            'No fue posible preparar la consulta de la postulación.'
+            'No fue posible preparar la actualización de la postulación.'
         );
     }
 
-    $stmt->bind_param('i', $id);
+    $stmt->bind_param(
+        'ssi',
+        $estado,
+        $comentarioSeguimiento,
+        $id
+    );
 
     if (!$stmt->execute()) {
         $stmt->close();
 
         respuestaJSON(
             false,
-            'No fue posible consultar la postulación.'
+            'No fue posible actualizar la postulación.'
         );
     }
 
-    $resultado = $stmt->get_result();
+    if ($stmt->affected_rows === 0) {
 
-    if (!$resultado || $resultado->num_rows === 0) {
         $stmt->close();
 
+        $sqlExiste = "
+            SELECT id
+            FROM patch_postulaciones
+            WHERE id = ?
+            LIMIT 1
+        ";
+
+        $stmtExiste = $conn->prepare($sqlExiste);
+
+        if (!$stmtExiste) {
+            respuestaJSON(
+                false,
+                'No fue posible verificar la postulación.'
+            );
+        }
+
+        $stmtExiste->bind_param('i', $id);
+        $stmtExiste->execute();
+
+        $resultadoExiste = $stmtExiste->get_result();
+
+        if (!$resultadoExiste || $resultadoExiste->num_rows === 0) {
+            $stmtExiste->close();
+
+            respuestaJSON(
+                false,
+                'La postulación no fue encontrada.'
+            );
+        }
+
+        $stmtExiste->close();
+    } else {
+        $stmt->close();
+    }
+
+    $sqlDatos = "
+        SELECT
+            id,
+            estado,
+            comentario_seguimiento,
+            updated_at
+        FROM patch_postulaciones
+        WHERE id = ?
+        LIMIT 1
+    ";
+
+    $stmtDatos = $conn->prepare($sqlDatos);
+
+    if (!$stmtDatos) {
         respuestaJSON(
-            false,
-            'La postulación no fue encontrada.'
+            true,
+            'Postulación actualizada correctamente.'
         );
     }
 
-    $fila = $resultado->fetch_assoc();
+    $stmtDatos->bind_param('i', $id);
+    $stmtDatos->execute();
 
-    $stmt->close();
+    $resultadoDatos = $stmtDatos->get_result();
+    $datos = [];
 
-    $esPostulacionVacante = !empty($fila['id_bolsa']);
+    if ($resultadoDatos && $resultadoDatos->num_rows > 0) {
 
-    $vacante = null;
+        $fila = $resultadoDatos->fetch_assoc();
 
-    if ($esPostulacionVacante) {
-
-        $vacante = [
-            'id' => (int)$fila['id_bolsa'],
-            'token' => (string)($fila['vacante_token'] ?? ''),
-            'titulo' => (string)($fila['vacante_titulo'] ?? ''),
-            'descripcion' => (string)($fila['vacante_descripcion'] ?? ''),
-            'ubicacion' => (string)($fila['vacante_ubicacion'] ?? ''),
-            'tipo_jornada' => (string)($fila['vacante_tipo_jornada'] ?? ''),
-            'modalidad' => (string)($fila['vacante_modalidad'] ?? ''),
-            'lo_que_se_ofrece' => (string)($fila['vacante_ofrece'] ?? ''),
-            'requisitos' => (string)($fila['vacante_requisitos'] ?? ''),
-            'responsabilidades' => (string)($fila['vacante_responsabilidades'] ?? '')
-        ];
-
-    } else {
-
-        $vacante = [
-            'id' => null,
-            'token' => '',
-            'titulo' => 'CV General',
-            'descripcion' => '',
-            'ubicacion' => '',
-            'tipo_jornada' => '',
-            'modalidad' => '',
-            'lo_que_se_ofrece' => '',
-            'requisitos' => '',
-            'responsabilidades' => ''
+        $datos = [
+            'id' => (int)$fila['id'],
+            'estado' => (string)$fila['estado'],
+            'comentario_seguimiento' => (string)($fila['comentario_seguimiento'] ?? ''),
+            'updated_at' => $fila['updated_at']
         ];
     }
 
-    $postulacion = [
-        'id' => (int)$fila['id'],
-        'id_bolsa' => $fila['id_bolsa'] !== null
-            ? (int)$fila['id_bolsa']
-            : null,
-
-        'tipo' => $esPostulacionVacante
-            ? 'vacante'
-            : 'general',
-
-        'nombre_completo' => (string)$fila['nombre_completo'],
-        'correo' => (string)$fila['correo'],
-        'telefono' => (string)$fila['telefono'],
-        'cv' => (string)$fila['cv'],
-        'comentarios' => (string)($fila['comentarios'] ?? ''),
-        'estado' => (string)$fila['estado'],
-        'fecha_postulacion' => $fila['fecha_postulacion'],
-        'updated_at' => $fila['updated_at'],
-
-        'vacante' => $vacante
-    ];
+    $stmtDatos->close();
 
     respuestaJSON(
         true,
-        'Postulación obtenida correctamente.',
-        $postulacion
+        'Postulación actualizada correctamente.',
+        $datos
     );
 
 } catch (Throwable $e) {
 
     respuestaJSON(
         false,
-        'Ocurrió un error al consultar la postulación.'
+        'Ocurrió un error al actualizar la postulación.'
     );
 }
-

@@ -100,7 +100,7 @@
                  */
 
                 $urlVacantePostulaciones =
-                    'Admin_Detalle_Postulacion.php?vacante=' .
+                    'Admin_Postulaciones.php?vacante=' .
                     $vacanteId;
 
                 ?>
