@@ -336,61 +336,190 @@ img,svg{
 }
 
 
+
 /* =========================================================
-   TOAST DE NOTIFICACIONES
+   TARJETA DE CONFIRMACIÓN DE POSTULACIONES
    ========================================================= */
-
-.patch-toast{
-    position:fixed;
-    top:24px;
-    right:24px;
-    z-index:10001;
-    width:min(390px,calc(100vw - 32px));
-    min-height:48px;
-    display:flex;
-    align-items:center;
-    gap:11px;
-    margin:0;
-    padding:13px 16px;
-    border:1px solid #b8dfc9;
-    border-radius:10px;
-    background:#fff;
-    color:#172033;
-    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:13px;
-    font-weight:600;
-    line-height:1.4;
-    box-shadow:
-        0 12px 30px rgba(15,23,42,.12),
-        0 3px 10px rgba(15,23,42,.06);
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    transform:translateY(-10px);
-    box-sizing:border-box;
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
+#patchToast.patch-toast {
+    position: fixed;
+    z-index: 10050;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(390px, calc(100vw - 32px));
+    padding: 30px 30px 27px;
+    box-sizing: border-box;
+    border: 1px solid #c9e8d5;
+    border-radius: 20px;
+    background: #fff;
+    color: var(--gray-800, #374151);
+    box-shadow: 0 22px 55px rgba(15, 23, 42, .18), 0 4px 14px rgba(15, 23, 42, .08);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, -46%) scale(.88);
+    transition: opacity .25s ease, visibility .25s ease, transform .3s cubic-bezier(.34, 1.56, .64, 1);
 }
 
-.patch-toast.show{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-    transform:translateY(0);
+#patchToast.patch-toast.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
 }
 
-.patch-toast.success{
-    border-color:#b8dfc9;
-    background:#f0faf5;
-    color:#126c3f;
+#patchToast.patch-toast.success {
+    border-color: #bfe4ce;
 }
 
-.patch-toast.error{
-    border-color:#fecaca;
-    background:#fff5f5;
-    color:#b91c1c;
+#patchToast.patch-toast.error {
+    border-color: #f0c7cc;
+}
+
+/* CÍRCULO DEL ICONO */
+#patchToast.patch-toast .patch-toast-icon {
+    display: flex !important;
+    flex: 0 0 68px;
+    align-items: center;
+    justify-content: center;
+    width: 68px !important;
+    min-width: 68px;
+    height: 68px !important;
+    min-height: 68px;
+    margin: 0 auto 18px;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+/* CÍRCULO VERDE DEGRADADO */
+#patchToast.patch-toast.success .patch-toast-icon {
+    background: linear-gradient(145deg, #e8fff0 0%, #b9efce 55%, #8cdbab 100%) !important;
+    border-color: rgba(22, 131, 77, .15);
+    color: #16834d !important;
+    box-shadow: 0 6px 18px rgba(22, 131, 77, .15), inset 0 2px 5px rgba(255, 255, 255, .8);
+}
+
+/* CÍRCULO ROJO PARA ERRORES */
+#patchToast.patch-toast.error .patch-toast-icon {
+    background: linear-gradient(145deg, #fff0f1 0%, #ffd9dd 55%, #f7b7c0 100%) !important;
+    border-color: rgba(220, 53, 69, .15);
+    color: #dc3545 !important;
+    box-shadow: 0 6px 18px rgba(220, 53, 69, .12), inset 0 2px 5px rgba(255, 255, 255, .8);
+}
+
+/* TAMAÑO Y ANIMACIÓN DE LA PALOMITA */
+#patchToast.patch-toast .patch-toast-icon i {
+    display: inline-block !important;
+    margin: 0;
+    padding: 0;
+    font-size: 30px !important;
+    font-weight: 900;
+    line-height: 1;
+}
+
+#patchToast.patch-toast.show.success .patch-toast-icon {
+    animation: patch-toast-icon-entrada .55s cubic-bezier(.34, 1.56, .64, 1) .1s both;
+}
+
+#patchToast.patch-toast.show.success .patch-toast-icon i {
+    animation: patch-toast-paloma .45s ease .25s both;
+}
+
+/* CONTENIDO DEL MENSAJE */
+#patchToast.patch-toast .patch-toast-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+}
+
+#patchToast.patch-toast .patch-toast-content strong {
+    display: block;
+    width: 100%;
+    margin: 0;
+    color: var(--gray-950, #111827);
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+#patchToast.patch-toast .patch-toast-content span {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    color: var(--gray-600, #4b5563);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+#patchToast.patch-toast.error .patch-toast-content strong {
+    color: #a51f2f;
+}
+
+/* ANIMACIÓN DE ENTRADA DEL CÍRCULO */
+@keyframes patch-toast-icon-entrada {
+    0% {
+        opacity: 0;
+        transform: scale(.35) rotate(-18deg);
+    }
+    65% {
+        opacity: 1;
+        transform: scale(1.12) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+/* ANIMACIÓN DE LA PALOMITA */
+@keyframes patch-toast-paloma {
+    0% {
+        opacity: 0;
+        transform: scale(.3);
+    }
+    65% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ANIMACIÓN SUAVE DE LA SOMBRA */
+#patchToast.patch-toast.show.success {
+    animation: patch-toast-shadow 2.8s ease-in-out .3s infinite alternate;
+}
+
+@keyframes patch-toast-shadow {
+    0% {
+        box-shadow: 0 22px 55px rgba(15, 23, 42, .18), 0 4px 14px rgba(15, 23, 42, .08);
+    }
+    100% {
+        box-shadow: 0 24px 60px rgba(15, 23, 42, .22), 0 5px 18px rgba(22, 131, 77, .12);
+    }
+}
+
+/* ADAPTACIÓN A PANTALLAS PEQUEÑAS */
+@media (max-width: 480px) {
+    #patchToast.patch-toast {
+        padding: 26px 22px 24px;
+    }
 }
 
 
@@ -2409,7 +2538,6 @@ img,svg{
 
 }
 
-
 /* =========================================================
    PARCIAL: modal_ver_postulacion.php
    MODAL DE DETALLE DE POSTULACIÓN
@@ -2461,7 +2589,6 @@ img,svg{
 .patch-modal[aria-hidden="false"] .patch-modal-container{
     transform:translateY(0) scale(1);
 }
-
 
 /* =========================================================
    ENCABEZADO DEL MODAL
@@ -2549,7 +2676,6 @@ img,svg{
     line-height:1;
 }
 
-
 /* =========================================================
    CUERPO DEL MODAL
    ========================================================= */
@@ -2582,7 +2708,6 @@ img,svg{
 .patch-modal-body::-webkit-scrollbar-thumb:hover{
     background:#94a3b8;
 }
-
 
 /* =========================================================
    PERFIL DEL CANDIDATO
@@ -2650,7 +2775,6 @@ img,svg{
     white-space:nowrap;
 }
 
-
 /* =========================================================
    GRID DE DETALLES
    ========================================================= */
@@ -2712,7 +2836,6 @@ img,svg{
     white-space:nowrap;
 }
 
-
 /* =========================================================
    SECCIONES DEL MODAL
    ========================================================= */
@@ -2738,7 +2861,6 @@ img,svg{
     line-height:1.4;
 }
 
-
 /* =========================================================
    COMENTARIOS
    ========================================================= */
@@ -2761,6 +2883,53 @@ img,svg{
     box-sizing:border-box;
 }
 
+/* =========================================================
+   COMENTARIO DE SEGUIMIENTO
+   ========================================================= */
+
+.patch-followup-description{
+    margin:-5px 0 12px;
+    color:#7a8493;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:12px;
+    font-weight:400;
+    line-height:1.55;
+}
+
+.patch-followup-textarea{
+    width:100%;
+    min-height:150px;
+    display:block;
+    margin:0;
+    padding:14px 15px;
+    border:1px solid #d8e3dd;
+    border-radius:11px;
+    outline:none;
+    background:#fbfdfc;
+    color:#172033;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:13px;
+    font-weight:400;
+    line-height:1.6;
+    resize:vertical;
+    box-sizing:border-box;
+    transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+
+.patch-followup-textarea::placeholder{
+    color:#9aa5b4;
+}
+
+.patch-followup-textarea:hover{
+    border-color:#b8daca;
+    background:#fff;
+}
+
+.patch-followup-textarea:focus{
+    border-color:#16834d;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(22,131,77,.10);
+}
 
 /* =========================================================
    TARJETA DEL CV
@@ -2876,7 +3045,6 @@ img,svg{
     line-height:1;
 }
 
-
 /* =========================================================
    SELECTOR DE ESTADO
    ========================================================= */
@@ -2958,7 +3126,6 @@ img,svg{
     color:#16834d;
 }
 
-
 /* =========================================================
    ESTADOS ESPECÍFICOS
    ========================================================= */
@@ -3017,7 +3184,6 @@ img,svg{
     background:#fee5e5;
     color:#dc2626;
 }
-
 
 /* =========================================================
    FOOTER
@@ -3098,13 +3264,11 @@ img,svg{
     box-shadow:0 0 0 3px rgba(22,131,77,.14);
 }
 
-
 /* =========================================================
    RESPONSIVE MODAL
    ========================================================= */
 
 @media (max-width:700px){
-
     .patch-modal{
         align-items:flex-start;
         padding:14px;
@@ -3170,6 +3334,10 @@ img,svg{
         margin-bottom:21px;
     }
 
+    .patch-followup-textarea{
+        min-height:145px;
+    }
+
     .patch-cv-card{
         align-items:flex-start;
         flex-direction:column;
@@ -3206,11 +3374,9 @@ img,svg{
     .patch-modal-footer-button{
         width:100%;
     }
-
 }
 
 @media (max-width:420px){
-
     .patch-modal{
         padding:8px;
     }
@@ -3243,8 +3409,11 @@ img,svg{
         font-size:12px;
     }
 
+    .patch-followup-textarea{
+        min-height:135px;
+    }
+
     .patch-modal-footer{
         padding:10px 15px;
     }
-
 }
