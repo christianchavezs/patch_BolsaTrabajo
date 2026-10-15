@@ -301,6 +301,8 @@
     /* ============================================================
        ABRIR POSTULACIÓN
        ============================================================ */
+    
+   
     function abrirPostulacion(postulacion) {
         if (!postulacion || typeof postulacion !== 'object') {
             return;
@@ -324,13 +326,46 @@
         const nombre = postulacion.nombre_completo || 'Sin nombre';
         const correo = postulacion.correo || 'Sin correo';
         const telefono = postulacion.telefono || 'Sin teléfono';
-        const vacante =
-            postulacion.vacante_titulo ||
-            'CV General / Postulación espontánea';
-        const ubicacion =
-            postulacion.vacante_ubicacion || 'No especificada';
-        const modalidad =
-            postulacion.vacante_modalidad || 'No especificada';
+
+        // La API devuelve los datos de la vacante dentro de postulacion.vacante.
+        const datosVacante =
+            postulacion.vacante &&
+            typeof postulacion.vacante === 'object'
+                ? postulacion.vacante
+                : {};
+
+        // Compatibilidad con propiedades directas y con la estructura anidada.
+        const idBolsa = postulacion.id_bolsa ?? datosVacante.id;
+
+        const tieneVacante =
+            idBolsa !== null &&
+            idBolsa !== undefined &&
+            String(idBolsa).trim() !== '' &&
+            Number(idBolsa) > 0;
+
+        const vacante = tieneVacante
+            ? (
+                datosVacante.titulo ||
+                postulacion.vacante_titulo ||
+                'Vacante sin título'
+            )
+            : 'CV General / Postulación espontánea';
+
+        const ubicacion = tieneVacante
+            ? (
+                datosVacante.ubicacion ||
+                postulacion.vacante_ubicacion ||
+                'No especificada'
+            )
+            : 'No especificada';
+
+        const modalidad = tieneVacante
+            ? (
+                datosVacante.modalidad ||
+                postulacion.vacante_modalidad ||
+                'No especificada'
+            )
+            : 'No especificada';
 
         const modalAvatar = obtenerElemento('modalAvatar');
 
@@ -415,27 +450,70 @@
             );
         }
 
-        const cvNombre = obtenerNombreArchivo(postulacion.cv);
+        // Actualizar el nombre y el visor del CV.
+        const rutaCV = String(postulacion.cv || '').trim();
         const detalleCVNombre = obtenerElemento('detalleCVNombre');
 
         if (detalleCVNombre) {
-            detalleCVNombre.textContent = cvNombre || 'CV.pdf';
+            detalleCVNombre.textContent = rutaCV
+                ? obtenerNombreArchivo(rutaCV)
+                : 'CV.pdf';
         }
 
         const btnCV = obtenerElemento('btnVerCV');
+        const visorCV = obtenerElemento('detalleCVVisor');
+        const contenedorVisorCV = obtenerElemento('contenedorVisorCV');
+        const mensajeSinCV = obtenerElemento('mensajeSinCV');
 
-        if (btnCV) {
-            if (postulacion.cv) {
-                btnCV.href = obtenerRutaCV(postulacion.cv);
+        const idPostulacion = Number(
+            postulacion.id || postulacion.id_postulacion || 0
+        );
+
+        if (rutaCV && idPostulacion > 0) {
+            const urlCV = 'api/ver_cv.php?id=' +
+                encodeURIComponent(idPostulacion);
+
+            if (btnCV) {
+                btnCV.href = urlCV;
+                btnCV.target = '_blank';
+                btnCV.rel = 'noopener noreferrer';
                 btnCV.style.display = 'inline-flex';
-            } else {
+            }
+
+            if (visorCV) {
+                visorCV.src = urlCV;
+            }
+
+            if (contenedorVisorCV) {
+                contenedorVisorCV.style.display = 'block';
+            }
+
+            if (mensajeSinCV) {
+                mensajeSinCV.style.display = 'none';
+            }
+        } else {
+            if (btnCV) {
                 btnCV.removeAttribute('href');
                 btnCV.style.display = 'none';
             }
+
+            if (visorCV) {
+                visorCV.src = 'about:blank';
+            }
+
+            if (contenedorVisorCV) {
+                contenedorVisorCV.style.display = 'none';
+            }
+
+            if (mensajeSinCV) {
+                mensajeSinCV.style.display = 'block';
+            }
         }
 
+        // Actualizar el estado de la postulación.
         actualizarSelectorEstado();
 
+        // Mostrar el modal.
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -449,9 +527,12 @@
         }
     }
 
+
+
     /* ============================================================
        CERRAR POSTULACIÓN
        ============================================================ */
+    
     function cerrarPostulacion() {
         const modal = obtenerElemento('modalPostulacion');
 
@@ -459,13 +540,47 @@
             return;
         }
 
+        // Cerrar el modal.
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden', 'true');
+
+        // Restaurar el desplazamiento de la página.
         document.body.style.overflow = '';
 
+        // Limpiar el visor PDF para detener su visualización.
+        const visorCV = obtenerElemento('detalleCVVisor');
+
+        if (visorCV) {
+            visorCV.src = 'about:blank';
+        }
+
+        // Ocultar el contenedor del visor.
+        const contenedorVisorCV = obtenerElemento('contenedorVisorCV');
+
+        if (contenedorVisorCV) {
+            contenedorVisorCV.style.display = 'none';
+        }
+
+        // Ocultar el botón para abrir el CV.
+        const btnCV = obtenerElemento('btnVerCV');
+
+        if (btnCV) {
+            btnCV.removeAttribute('href');
+            btnCV.style.display = 'none';
+        }
+
+        // Restablecer el mensaje de CV no disponible.
+        const mensajeSinCV = obtenerElemento('mensajeSinCV');
+
+        if (mensajeSinCV) {
+            mensajeSinCV.style.display = 'none';
+        }
+
+        // Limpiar los datos de la postulación seleccionada.
         postulacionActual = null;
         estadoSeleccionado = null;
     }
+
 
     /* ============================================================
        SELECCIONAR ESTADO

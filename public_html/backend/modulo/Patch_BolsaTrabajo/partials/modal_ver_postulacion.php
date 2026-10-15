@@ -202,54 +202,54 @@
             </div>
 
 
-            <div class="patch-modal-section">
+            
+<div class="patch-modal-section">
+    <h3>Currículum vitae</h3>
 
-                <h3>
-                    Currículum vitae
-                </h3>
-
-                <div class="patch-cv-card">
-
-                    <div class="patch-cv-info">
-
-                        <div class="patch-cv-icon">
-
-                            <i class="fa fa-file-pdf"></i>
-
-                        </div>
-
-                        <div>
-
-                            <div
-                                class="patch-cv-name"
-                                id="detalleCVNombre"
-                            >
-                                CV.pdf
-                            </div>
-
-                            <div class="patch-cv-label">
-                                Documento PDF
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <a
-                        href="#"
-                        id="btnVerCV"
-                        class="patch-cv-button"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <i class="fa fa-eye"></i>
-                        Ver CV
-                    </a>
-
-                </div>
-
+    <div class="patch-cv-card">
+        <div class="patch-cv-info">
+            <div class="patch-cv-icon">
+                <i class="fa fa-file-pdf"></i>
             </div>
+
+            <div>
+                <div class="patch-cv-name" id="detalleCVNombre">CV.pdf</div>
+                <div class="patch-cv-label">Documento PDF</div>
+            </div>
+        </div>
+
+        <a
+            href="#"
+            id="btnVerCV"
+            class="patch-cv-button"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Abrir CV en otra pestaña"
+            style="display: none;"
+        >
+            <i class="fa fa-file-pdf"></i> Abrir en otra pestaña
+        </a>
+    </div>
+
+    <div
+        id="contenedorVisorCV"
+        class="patch-cv-viewer-container"
+        style="display: none;"
+    >
+        <iframe
+            id="detalleCVVisor"
+            class="patch-cv-viewer"
+            title="Visor del currículum vitae"
+            src="about:blank"
+            style="width: 100%; height: 600px; border: 0;"
+        ></iframe>
+    </div>
+
+    <p id="mensajeSinCV" style="display: none;">
+        Esta postulación no tiene un currículum vitae disponible.
+    </p>
+</div>
+
 
 
             <div class="patch-modal-section">
