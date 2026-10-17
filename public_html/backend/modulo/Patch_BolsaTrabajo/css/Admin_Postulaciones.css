@@ -1487,6 +1487,278 @@ img,svg{
 }
 
 
+
+
+
+
+/* =========================================================
+   PAGINACIÓN DE TABLAS
+   ========================================================= */
+
+.patch-pagination{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    width:100%;
+    padding:18px 20px;
+    border-top:1px solid #eef1f4;
+    background:#fff;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+.patch-pagination-summary{
+    flex:1 1 180px;
+    min-width:0;
+    color:#64748b;
+    font-size:12px;
+    font-weight:500;
+    line-height:1.5;
+}
+
+.patch-pagination-size{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    flex:0 0 auto;
+    gap:8px;
+    color:#64748b;
+    font-size:12px;
+    white-space:nowrap;
+}
+
+.patch-pagination-size label{
+    flex:0 0 auto;
+    margin:0;
+    color:#475569;
+    font-size:12px;
+    font-weight:600;
+}
+
+.patch-pagination-size select{
+    flex:0 0 auto;
+    min-width:66px;
+    height:34px;
+    padding:0 28px 0 10px;
+    border:1px solid #dbe2e8;
+    border-radius:7px;
+    outline:none;
+    background-color:#fff;
+    color:#334155;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    transition:border-color .15s ease,box-shadow .15s ease;
+}
+
+.patch-pagination-size select:hover{
+    border-color:#16a34a;
+}
+
+.patch-pagination-size select:focus{
+    border-color:#16a34a;
+    box-shadow:0 0 0 3px rgba(22,163,74,.12);
+}
+
+.patch-pagination-controls{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    flex:0 0 auto;
+    flex-wrap:wrap;
+    gap:5px;
+}
+
+.patch-pagination-button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    min-width:34px;
+    height:34px;
+    padding:0 10px;
+    border:1px solid #e2e8f0;
+    border-radius:7px;
+    background:#fff;
+    color:#475569;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    line-height:1;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease;
+}
+
+.patch-pagination-button:hover:not(:disabled):not(.is-active){
+    border-color:#86efac;
+    background:#f0fdf4;
+    color:#15803d;
+}
+
+.patch-pagination-button.is-active{
+    border-color:#15803d;
+    background:#15803d;
+    color:#fff;
+    cursor:default;
+}
+
+.patch-pagination-button:focus-visible{
+    outline:2px solid #16a34a;
+    outline-offset:2px;
+}
+
+.patch-pagination-button:disabled{
+    border-color:#edf0f2;
+    background:#f8fafc;
+    color:#cbd5e1;
+    cursor:not-allowed;
+}
+
+.patch-pagination-ellipsis{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    min-width:20px;
+    height:34px;
+    color:#94a3b8;
+    font-size:13px;
+    user-select:none;
+}
+
+/* =========================================================
+   ENCABEZADO: CONTADOR Y SELECTOR DE REGISTROS
+   ========================================================= */
+
+.patch-panel-header-tools{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    flex:0 0 auto;
+    flex-wrap:wrap;
+    gap:18px;
+    min-width:0;
+    margin-left:auto;
+}
+
+.patch-panel-header-tools .patch-panel-count{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    min-width:max-content;
+    white-space:nowrap;
+}
+
+.patch-panel-header-tools .patch-pagination-size{
+    flex:0 0 auto;
+    margin:0;
+}
+
+/* =========================================================
+   ESTADO OCULTO DE FILAS PAGINADAS
+   ========================================================= */
+
+.patch-table tbody tr[hidden]{
+    display:none !important;
+}
+
+/* =========================================================
+   RESPONSIVE: PAGINACIÓN Y ENCABEZADO
+   ========================================================= */
+
+@media (max-width:768px){
+    .patch-pagination{
+        justify-content:center;
+        padding:16px;
+        gap:14px;
+    }
+
+    .patch-pagination-summary{
+        flex:1 1 100%;
+        width:100%;
+        text-align:center;
+    }
+
+    .patch-pagination-size{
+        justify-content:center;
+    }
+
+    .patch-pagination-controls{
+        flex:1 1 100%;
+        width:100%;
+        justify-content:center;
+        gap:4px;
+    }
+
+    .patch-pagination-button{
+        min-width:32px;
+        height:32px;
+        padding:0 8px;
+        font-size:11px;
+    }
+
+    .patch-pagination-ellipsis{
+        min-width:14px;
+        height:32px;
+    }
+
+    .patch-panel-header-tools{
+        justify-content:flex-start;
+        gap:12px;
+        margin-left:0;
+    }
+}
+
+@media (max-width:520px){
+    .patch-panel-header-tools{
+        width:100%;
+        justify-content:space-between;
+        gap:12px;
+        margin-top:12px;
+    }
+
+    .patch-panel-header-tools .patch-panel-count{
+        white-space:normal;
+    }
+
+    .patch-panel-header-tools .patch-pagination-size{
+        gap:6px;
+    }
+}
+
+@media (max-width:420px){
+    .patch-pagination{
+        padding:14px 10px;
+    }
+
+    .patch-pagination-controls{
+        gap:3px;
+    }
+
+    .patch-pagination-button{
+        min-width:29px;
+        height:30px;
+        padding:0 6px;
+        border-radius:6px;
+        font-size:11px;
+    }
+
+    .patch-pagination-size select{
+        min-width:60px;
+        height:32px;
+    }
+
+    .patch-panel-header-tools{
+        gap:10px;
+    }
+}
+
+
+
+
 /* =========================================================
    CANDIDATO
    ========================================================= */
