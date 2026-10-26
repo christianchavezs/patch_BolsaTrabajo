@@ -338,6 +338,54 @@ if (!$stmt) {
 
     <div class="hero-contenido">
 
+
+		    <!-- Botón para regresar al inicio -->
+		<div style="
+			width: 100%;
+			text-align: left;
+			margin: 20px 0 25px 0;
+			padding: 0;
+			box-sizing: border-box;
+		">
+			<a href="https://www.kombitec.com.mx/"
+			   style="
+				   display: inline-flex;
+				   align-items: center;
+				   justify-content: center;
+				   gap: 10px;
+				   padding: 12px 22px;
+				   background: linear-gradient(135deg, #D4E66A, #B8D94C);
+				   color: #26330B;
+				   font-family: Arial, sans-serif;
+				   font-size: 14px;
+				   font-weight: bold;
+				   text-decoration: none;
+				   text-transform: uppercase;
+				   letter-spacing: 0.4px;
+				   border-radius: 8px;
+				   border: 1px solid #A5C438;
+				   box-shadow: 0 4px 10px rgba(137, 164, 40, 0.20);
+				   transition: all 0.3s ease;
+				   box-sizing: border-box;
+			   "
+			   onmouseover="
+				   this.style.background='linear-gradient(135deg, #E4F58A, #C8E65B)';
+				   this.style.transform='translateY(-2px)';
+				   this.style.boxShadow='0 6px 14px rgba(137, 164, 40, 0.30)';
+			   "
+			   onmouseout="
+				   this.style.background='linear-gradient(135deg, #D4E66A, #B8D94C)';
+				   this.style.transform='translateY(0)';
+				   this.style.boxShadow='0 4px 10px rgba(137, 164, 40, 0.20)';
+			   ">
+				
+				<span style="font-size: 20px; line-height: 1;">&#8592;</span>
+				<span>Regresar al inicio</span>
+
+			</a>
+		</div>
+		
+
         <span class="etiqueta">
             Nuevas oportunidades para ti
         </span>
