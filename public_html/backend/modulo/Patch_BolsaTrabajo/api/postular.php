@@ -756,8 +756,8 @@ $mensajeCorreo = '
    ========================================================= */
 
 $correoDestino =
-    'christianchavez394@gmail.com';
-
+    //'christianchavez394@gmail.com';
+    'desarrollo1@kombitec.com.mx';
 
 /* =========================================================
    ENVIAR CORREO

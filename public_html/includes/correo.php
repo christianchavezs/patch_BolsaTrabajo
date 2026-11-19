@@ -31,8 +31,13 @@ function enviarCorreo(
     // CONFIGURACIÓN SMTP
     // =========================================================
 
-    $correoSMTP = 'christianchavez394@gmail.com';
-    $contrasenaAplicacion = 'uflrkymxmdcnddgc';
+    //$correoSMTP = 'christianchavez394@gmail.com';
+    //$contrasenaAplicacion = 'uflrkymxmdcnddgc';
+
+
+    $correoSMTP = 'desarrollo1@kombitec.com.mx';
+    $contrasenaAplicacion = 'jpifzcowwhhexlty';
+    
 
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com';

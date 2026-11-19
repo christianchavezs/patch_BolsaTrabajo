@@ -45,12 +45,13 @@
                         <?php
                         $vacanteId = (int)($vacante['id'] ?? 0);
                         $vacanteTitulo = trim((string)($vacante['titulo'] ?? ''));
+                        $esArchivadaVacante = (int)($vacante['archivada'] ?? 0) === 1;
                         ?>
                         <option
                             value="<?php echo $vacanteId; ?>"
                             <?php echo $filtroVacante === $vacanteId ? 'selected' : ''; ?>
                         >
-                            <?php echo e($vacanteTitulo !== '' ? $vacanteTitulo : 'Vacante sin título'); ?>
+                            <?php echo e($vacanteTitulo !== '' ? $vacanteTitulo : 'Vacante sin título'); ?><?php echo $esArchivadaVacante ? ' (Archivada)' : ''; ?>
                         </option>
                     <?php endforeach; ?>
                 <?php endif; ?>

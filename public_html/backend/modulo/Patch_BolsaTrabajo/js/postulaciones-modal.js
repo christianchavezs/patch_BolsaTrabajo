@@ -513,6 +513,28 @@
         // Actualizar el estado de la postulación.
         actualizarSelectorEstado();
 
+        // Actualizar banner de último correo enviado si existe
+        const bannerUltimoCorreo = obtenerElemento('bannerUltimoCorreo');
+        const textoUltimoCorreo = obtenerElemento('textoUltimoCorreo');
+        if (bannerUltimoCorreo && textoUltimoCorreo) {
+            if (postulacion.tipo_ultimo_correo && postulacion.fecha_ultimo_correo) {
+                const tipoTexto = postulacion.tipo_ultimo_correo === 'positivo' ? 'Positivo / Cita' : 'Negativo / Descarte';
+                textoUltimoCorreo.textContent = 'Último correo enviado: ' + tipoTexto + ' (' + formatearFechaJS(postulacion.fecha_ultimo_correo) + ')';
+                bannerUltimoCorreo.className = 'patch-mail-status-banner has-email';
+                bannerUltimoCorreo.style.display = 'flex';
+            } else {
+                textoUltimoCorreo.textContent = 'No se ha enviado correo previo a este candidato.';
+                bannerUltimoCorreo.className = 'patch-mail-status-banner';
+                bannerUltimoCorreo.style.display = 'flex';
+            }
+        }
+
+        // Aviso de sugerencia si el estado es entrevista
+        const avisoEntrevista = obtenerElemento('avisoSugerenciaEntrevista');
+        if (avisoEntrevista) {
+            avisoEntrevista.style.display = estadoSeleccionado === 'entrevista' ? 'flex' : 'none';
+        }
+
         // Mostrar el modal.
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
@@ -592,6 +614,11 @@
 
         estadoSeleccionado = button.dataset.estado || 'nueva';
         actualizarSelectorEstado();
+
+        const avisoEntrevista = obtenerElemento('avisoSugerenciaEntrevista');
+        if (avisoEntrevista) {
+            avisoEntrevista.style.display = estadoSeleccionado === 'entrevista' ? 'flex' : 'none';
+        }
     }
 
     /* ============================================================
@@ -863,6 +890,9 @@
     /* ============================================================
        EXPONER FUNCIONES GLOBALMENTE
        ============================================================ */
+    window.obtenerPostulacionActual = function () {
+        return postulacionActual;
+    };
     window.cargarPostulacion = cargarPostulacion;
     window.abrirPostulacion = abrirPostulacion;
     window.cerrarPostulacion = cerrarPostulacion;

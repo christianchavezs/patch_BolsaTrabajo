@@ -62,6 +62,22 @@ function adminEstaAutenticado(): bool
 }
 
 /**
+ * Obtiene el nombre del usuario administrador autenticado.
+ */
+function adminNombre(): string
+{
+    return (string) ($_SESSION['admin_nombre'] ?? 'Administrador');
+}
+
+/**
+ * Obtiene el correo del usuario administrador autenticado.
+ */
+function adminCorreo(): string
+{
+    return (string) ($_SESSION['admin_correo'] ?? '');
+}
+
+/**
  * Protege una página administrativa.
  *
  * Si no hay sesión, redirige al login.

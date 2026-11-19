@@ -575,7 +575,8 @@ if ($vacante) {
             <strong>Bolsa de Trabajo</strong>
             <span>Encuentra tu próxima oportunidad.</span>
         </div>
-        <a href="mailto:christianchavez394@gmail.com">Contacto</a>
+        <!--a href="mailto:christianchavez394@gmail.com">Contacto</a-->
+        <a href="mailto:desarrollo1@kombitec.com.mx">Contacto</a>
     </div>
 </footer>
 

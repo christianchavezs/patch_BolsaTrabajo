@@ -419,7 +419,7 @@ $description = 'Administración de postulaciones y CV generales de Kombitec';
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </span>
 
-                <span class="patch-user-label">Mi cuenta</span>
+                <span class="patch-user-label"><?php echo e(adminNombre()); ?></span>
 
                 <i
                     class="fa fa-chevron-down patch-user-arrow"
@@ -429,8 +429,8 @@ $description = 'Administración de postulaciones y CV generales de Kombitec';
 
             <div class="patch-user-dropdown">
                 <div class="patch-user-info">
-                    <strong>Sesión administrativa</strong>
-                    <span>Opciones de tu cuenta</span>
+                    <strong><?php echo e(adminNombre()); ?></strong>
+                    <span><?php echo e(adminCorreo() !== '' ? adminCorreo() : 'Sesión activa'); ?></span>
                 </div>
 
                 <div class="patch-user-divider"></div>
@@ -452,6 +452,18 @@ $description = 'Administración de postulaciones y CV generales de Kombitec';
                     <i class="fa fa-arrow-left"></i>
                     Regresar a vacantes
                 </a>
+                <a href="Admin_Reportes.php" class="patch-postulaciones-btn">
+                    <i class="fa fa-chart-pie"></i>
+                    Reportes y Estadísticas
+                </a>
+                <a href="Admin_Plantillas_Correo.php" class="patch-postulaciones-btn">
+                    <i class="fa fa-envelope-open-text"></i>
+                    Plantillas de correo
+                </a>
+                <button type="button" class="patch-btn-export" onclick="abrirModalExportar()">
+                    <i class="fa fa-file-excel"></i>
+                    Exportar a Excel
+                </button>
             </div>
 
             <br>
@@ -508,6 +520,7 @@ $description = 'Administración de postulaciones y CV generales de Kombitec';
     <!-- MODAL DE DETALLE DE POSTULACIÓN -->
     <?php
     require_once __DIR__ . '/partials/modal_ver_postulacion.php';
+    require_once __DIR__ . '/partials/modal_exportar_excel.php';
     ?>
 
     <!-- FORMULARIO OCULTO PARA ACTUALIZAR ESTADO -->
@@ -530,6 +543,8 @@ $description = 'Administración de postulaciones y CV generales de Kombitec';
     <script src="js/postulaciones-api.js"></script>
     <script src="js/postulaciones-listado.js"></script>
     <script src="js/postulaciones-modal.js"></script>
+    <script src="js/correo-postulacion.js"></script>
+    <script src="js/exportar-excel.js"></script>
 
     <!-- MENSAJES DE OPERACIÓN -->
     <?php if ($mensajeOperacion !== ''): ?>

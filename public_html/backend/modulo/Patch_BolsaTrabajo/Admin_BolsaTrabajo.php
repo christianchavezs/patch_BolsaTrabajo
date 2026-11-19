@@ -71,7 +71,7 @@ $description = "";
             <i class="fa fa-user" aria-hidden="true"></i>
         </span>
 
-        <span class="patch-user-label">Mi cuenta</span>
+        <span class="patch-user-label"><?php echo htmlspecialchars(adminNombre(), ENT_QUOTES, 'UTF-8'); ?></span>
 
         <i
             class="fa fa-chevron-down patch-user-arrow"
@@ -81,8 +81,8 @@ $description = "";
 
     <div class="patch-user-dropdown">
         <div class="patch-user-info">
-            <strong>Sesión administrativa</strong>
-            <span>Opciones de tu cuenta</span>
+            <strong><?php echo htmlspecialchars(adminNombre(), ENT_QUOTES, 'UTF-8'); ?></strong>
+            <span><?php echo htmlspecialchars(adminCorreo() !== '' ? adminCorreo() : 'Sesión activa', ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
 
         <div class="patch-user-divider"></div>
@@ -119,6 +119,24 @@ $description = "";
                 >
                     <i class="fa fa-users" aria-hidden="true"></i>
                     Mostrar Postulaciones
+                </a>
+
+                <a
+                    href="Admin_Reportes.php"
+                    class="patch-btn-primary"
+                    id="btnReportes"
+                >
+                    <i class="fa fa-chart-pie" aria-hidden="true"></i>
+                    Reportes
+                </a>
+
+                <a
+                    href="Admin_Plantillas_Correo.php"
+                    class="patch-btn-primary"
+                    id="btnPlantillasCorreo"
+                >
+                    <i class="fa fa-envelope-open-text" aria-hidden="true"></i>
+                    Plantillas de correo
                 </a>
 
                 <a

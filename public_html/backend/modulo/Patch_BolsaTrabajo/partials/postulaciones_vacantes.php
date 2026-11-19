@@ -14,12 +14,19 @@
 
     </div>
 
+    <?php
+    // Filtrar para que las vacantes archivadas NO aparezcan en las cards de esta vista
+    $vacantesCards = array_values(array_filter(
+        $vacantesPostulaciones ?? [],
+        fn($v) => (int)($v['archivada'] ?? 0) === 0
+    ));
+    ?>
 
-    <?php if (!empty($vacantesPostulaciones)): ?>
+    <?php if (!empty($vacantesCards)): ?>
 
         <div class="patch-vacancies-grid">
 
-            <?php foreach ($vacantesPostulaciones as $vacante): ?>
+            <?php foreach ($vacantesCards as $vacante): ?>
 
                 <?php
 
@@ -364,15 +371,15 @@
 
                 <h3>
 
-                    No hay vacantes con postulaciones
+                    No hay vacantes activas con postulaciones
 
                 </h3>
 
 
                 <p>
 
-                    Cuando una persona se postule a una vacante,
-                    aparecerá aquí el resumen correspondiente.
+                    Las vacantes archivadas no se muestran en esta sección.
+                    Cuando una vacante vigente reciba candidatos, aparecerá aquí el resumen correspondiente.
 
                 </p>
 

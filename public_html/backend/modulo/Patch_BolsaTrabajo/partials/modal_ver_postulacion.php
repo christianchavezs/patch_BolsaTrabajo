@@ -367,6 +367,55 @@
             </div>
 
 
+            <!-- SECCIÓN: COMUNICACIÓN Y ENVÍO DE CORREOS -->
+            <div class="patch-modal-section">
+
+                <h3>
+                    <i class="fa fa-envelope-open-text" style="color: #2563eb;"></i>
+                    Comunicación y Seguimiento
+                </h3>
+
+                <div class="patch-communication-card">
+
+                    <div id="bannerUltimoCorreo" class="patch-mail-status-banner" style="display: none;">
+                        <i class="fa fa-envelope-circle-check"></i>
+                        <span id="textoUltimoCorreo">Último correo enviado: Sin registros</span>
+                    </div>
+
+                    <div id="avisoSugerenciaEntrevista" class="patch-interview-highlight-tip" style="display: none;">
+                        <i class="fa fa-circle-info"></i>
+                        <span>
+                            Has seleccionado <strong>Entrevista</strong>. Utiliza el botón de correo positivo para agendar la fecha y hora acordada por teléfono y enviar la confirmación al postulante.
+                        </span>
+                    </div>
+
+                    <div class="patch-email-buttons-grid">
+                        <button
+                            type="button"
+                            class="patch-btn-mail-action positive"
+                            onclick="abrirModalEnviarCorreo('positivo')"
+                            title="Enviar invitación a entrevista o avance de proceso"
+                        >
+                            <i class="fa fa-envelope-circle-check"></i>
+                            <span>Enviar correo positivo / Citar</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="patch-btn-mail-action negative"
+                            onclick="abrirModalEnviarCorreo('negativo')"
+                            title="Enviar carta de agradecimiento y descarte"
+                        >
+                            <i class="fa fa-envelope-open"></i>
+                            <span>Enviar correo negativo</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
             <div class="patch-modal-section">
 
                 <h3>
@@ -421,3 +470,7 @@
 
     </div>
 </div>
+
+<?php
+require_once __DIR__ . '/modal_enviar_correo.php';
+?>

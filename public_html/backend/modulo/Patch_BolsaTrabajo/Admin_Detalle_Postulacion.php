@@ -163,6 +163,39 @@ if ($idBolsa <= 0) {
 </head>
 <body>
 <div class="patch-detail-wrapper">
+    <!-- MENÚ DE USUARIO -->
+    <details class="patch-user-menu" id="patchUserMenu">
+        <summary
+            aria-label="Abrir menú de usuario"
+            aria-haspopup="true"
+        >
+            <span class="patch-user-avatar">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </span>
+
+            <span class="patch-user-label"><?php echo e(adminNombre()); ?></span>
+
+            <i
+                class="fa fa-chevron-down patch-user-arrow"
+                aria-hidden="true"
+            ></i>
+        </summary>
+
+        <div class="patch-user-dropdown">
+            <div class="patch-user-info">
+                <strong><?php echo e(adminNombre()); ?></strong>
+                <span><?php echo e(adminCorreo() !== '' ? adminCorreo() : 'Sesión activa'); ?></span>
+            </div>
+
+            <div class="patch-user-divider"></div>
+
+            <a href="../../../cerrar_sesion.php">
+                <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
+                <span>Cerrar sesión</span>
+            </a>
+        </div>
+    </details>
+
     <div class="patch-detail-container">
         <div class="patch-detail-actions">
             <a href="Admin_Postulaciones.php" class="patch-detail-btn"><i class="fa fa-arrow-left"></i> Regresar a postulaciones</a>
@@ -242,6 +275,39 @@ if (!$vacante) {
 </head>
 <body>
 <div class="patch-detail-wrapper">
+    <!-- MENÚ DE USUARIO -->
+    <details class="patch-user-menu" id="patchUserMenu">
+        <summary
+            aria-label="Abrir menú de usuario"
+            aria-haspopup="true"
+        >
+            <span class="patch-user-avatar">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </span>
+
+            <span class="patch-user-label"><?php echo e(adminNombre()); ?></span>
+
+            <i
+                class="fa fa-chevron-down patch-user-arrow"
+                aria-hidden="true"
+            ></i>
+        </summary>
+
+        <div class="patch-user-dropdown">
+            <div class="patch-user-info">
+                <strong><?php echo e(adminNombre()); ?></strong>
+                <span><?php echo e(adminCorreo() !== '' ? adminCorreo() : 'Sesión activa'); ?></span>
+            </div>
+
+            <div class="patch-user-divider"></div>
+
+            <a href="../../../cerrar_sesion.php">
+                <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
+                <span>Cerrar sesión</span>
+            </a>
+        </div>
+    </details>
+
     <div class="patch-detail-container">
         <div class="patch-detail-actions">
             <a href="Admin_Postulaciones.php" class="patch-detail-btn"><i class="fa fa-arrow-left"></i> Regresar a postulaciones</a>
@@ -413,9 +479,43 @@ $description = 'Dashboard de postulaciones de la vacante ' . $tituloVacante . '.
 </head>
 <body>
 <div class="patch-detail-wrapper">
+    <!-- MENÚ DE USUARIO -->
+    <details class="patch-user-menu" id="patchUserMenu">
+        <summary
+            aria-label="Abrir menú de usuario"
+            aria-haspopup="true"
+        >
+            <span class="patch-user-avatar">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </span>
+
+            <span class="patch-user-label"><?php echo e(adminNombre()); ?></span>
+
+            <i
+                class="fa fa-chevron-down patch-user-arrow"
+                aria-hidden="true"
+            ></i>
+        </summary>
+
+        <div class="patch-user-dropdown">
+            <div class="patch-user-info">
+                <strong><?php echo e(adminNombre()); ?></strong>
+                <span><?php echo e(adminCorreo() !== '' ? adminCorreo() : 'Sesión activa'); ?></span>
+            </div>
+
+            <div class="patch-user-divider"></div>
+
+            <a href="../../../cerrar_sesion.php">
+                <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
+                <span>Cerrar sesión</span>
+            </a>
+        </div>
+    </details>
+
     <div class="patch-detail-container">
-        <div class="patch-vacancy-dashboard-back">
+        <div class="patch-vacancy-dashboard-back" style="display: flex; gap: 10px; flex-wrap: wrap;">
             <a href="Admin_Postulaciones.php" class="patch-detail-btn"><i class="fa fa-arrow-left"></i> Regresar a postulaciones</a>
+            <a href="Admin_Plantillas_Correo.php" class="patch-detail-btn"><i class="fa fa-envelope-open-text"></i> Plantillas de correo</a>
         </div>
 
         <!-- =====================================================
@@ -696,6 +796,7 @@ $description = 'Dashboard de postulaciones de la vacante ' . $tituloVacante . '.
      ========================================================= -->
 <script src="js/postulaciones-api.js"></script>
 <script src="js/postulaciones-modal.js"></script>
+<script src="js/correo-postulacion.js"></script>
 
 <?php if ($mensajeOperacion !== '' || $errorOperacion !== ''): ?>
 <script>

@@ -5,6 +5,7 @@ requerirAdminApi();
 error_reporting(E_ERROR | E_PARSE);
 
 require_once __DIR__ . "/../../../../includes/config.php";
+require_once __DIR__ . "/../includes/plantillas_helper.php";
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -31,6 +32,8 @@ if ($id === false || $id === null || $id <= 0) {
 
 try {
 
+    asegurarEstructuraPlantillas($conn);
+
     $sql = "
         SELECT
             p.id,
@@ -42,6 +45,9 @@ try {
             p.comentarios,
             p.comentario_seguimiento,
             p.estado,
+            p.fecha_entrevista,
+            p.fecha_ultimo_correo,
+            p.tipo_ultimo_correo,
             p.fecha_postulacion,
             p.updated_at,
 
@@ -152,6 +158,9 @@ try {
         'comentarios' => (string)($fila['comentarios'] ?? ''),
         'comentario_seguimiento' => (string)($fila['comentario_seguimiento'] ?? ''),
         'estado' => (string)$fila['estado'],
+        'fecha_entrevista' => $fila['fecha_entrevista'] ?? null,
+        'fecha_ultimo_correo' => $fila['fecha_ultimo_correo'] ?? null,
+        'tipo_ultimo_correo' => $fila['tipo_ultimo_correo'] ?? null,
         'fecha_postulacion' => $fila['fecha_postulacion'],
         'updated_at' => $fila['updated_at'],
 
